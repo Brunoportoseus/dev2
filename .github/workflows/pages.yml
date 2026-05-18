@@ -1,6 +1,6 @@
 name: Deploy GitHub Pages
 
-# Publica o site estático (index.html + estatistica.html) no GitHub Pages.
+# Publica o site estático (index.html — ferramenta Estatística & Decisão).
 # Pré-requisito (uma única vez): Settings > Pages > Source = "GitHub Actions".
 
 on:

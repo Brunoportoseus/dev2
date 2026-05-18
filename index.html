@@ -3,1176 +3,445 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PLANOA — CRM & Automação de Vendas</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<title>Estatística & Decisão</title>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --bg: #F6F7FA;
-  --surface: #FFFFFF;
-  --surface2: #F0F2F7;
-  --surface3: #E8EBF3;
-  --border: rgba(0,0,0,0.08);
-  --border2: rgba(0,0,0,0.13);
-  --text: #131722;
-  --text2: #5A6178;
-  --text3: #9099B3;
-  --accent: #5C5FEF;
-  --accent2: #7B7EF4;
-  --accent-bg: #EEEEFF;
-  --sidebar: #0D1117;
-  --sidebar2: #161B26;
-  --sidebar-text: rgba(255,255,255,0.55);
-  --sidebar-text-active: #fff;
-  --sidebar-border: rgba(255,255,255,0.06);
-  --success: #16A34A;
-  --success-bg: #DCFCE7;
-  --warning: #D97706;
-  --warning-bg: #FEF3C7;
-  --danger: #DC2626;
-  --danger-bg: #FEE2E2;
-  --info: #0891B2;
-  --info-bg: #CFFAFE;
-  --green: #10B981;
-  --pink: #EC4899;
-  --purple: #8B5CF6;
-  --orange: #F59E0B;
-  --radius-sm: 6px;
-  --radius: 10px;
-  --radius-lg: 14px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
-  --shadow: 0 4px 16px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04);
-  --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
-  --font: 'Plus Jakarta Sans', system-ui, sans-serif;
-  --mono: 'DM Mono', monospace;
-  --transition: 0.16s ease;
-}
-
-[data-theme="dark"] {
-  --bg: #0A0D14;
-  --surface: #111520;
-  --surface2: #161B2A;
-  --surface3: #1D2438;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
-  --text: #E8EEFF;
-  --text2: #8891B0;
-  --text3: #525B78;
-  --accent: #7B7EF4;
-  --accent2: #9B9EFF;
-  --accent-bg: #1E1F4E;
-  --sidebar: #070A10;
-  --sidebar2: #0D1117;
-  --success-bg: #052E16;
-  --warning-bg: #1C1106;
-  --danger-bg: #1C0606;
-  --info-bg: #061A20;
-}
-
-html, body { height: 100%; font-family: var(--font); background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
-
-/* ── LAYOUT ────────────────────────────────────────────── */
-#app { display: flex; height: 100vh; overflow: hidden; }
-
-/* ── SIDEBAR ───────────────────────────────────────────── */
-#sidebar {
-  width: 220px; flex-shrink: 0; background: var(--sidebar);
-  display: flex; flex-direction: column; overflow: hidden;
-  transition: width var(--transition);
-}
-#sidebar.collapsed { width: 60px; }
-
-.sidebar-logo {
-  padding: 20px 16px 16px; border-bottom: 1px solid var(--sidebar-border);
-  display: flex; align-items: center; gap: 10px; flex-shrink: 0;
-}
-.logo-mark {
-  width: 32px; height: 32px; background: linear-gradient(135deg, var(--accent), #8B5CF6);
-  border-radius: 9px; display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; box-shadow: 0 4px 14px rgba(92,95,239,0.4);
-}
-.logo-mark i { font-size: 16px; color: #fff; }
-.logo-text { font-size: 17px; font-weight: 700; color: #fff; letter-spacing: -0.5px; white-space: nowrap; overflow: hidden; }
-.logo-text span { color: var(--accent2); }
-
-.sidebar-search {
-  margin: 12px 10px; background: rgba(255,255,255,0.06); border-radius: var(--radius-sm);
-  display: flex; align-items: center; gap: 7px; padding: 7px 10px; cursor: text;
-  border: 1px solid transparent; transition: border-color var(--transition);
-}
-.sidebar-search:hover { border-color: rgba(255,255,255,0.1); }
-.sidebar-search i { font-size: 14px; color: rgba(255,255,255,0.25); flex-shrink: 0; }
-.sidebar-search span { font-size: 12px; color: rgba(255,255,255,0.25); white-space: nowrap; overflow: hidden; }
-
-.sidebar-section-label {
-  font-size: 9.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-  color: rgba(255,255,255,0.22); padding: 14px 14px 5px; white-space: nowrap; overflow: hidden;
-}
-
-.nav-item {
-  display: flex; align-items: center; gap: 9px; padding: 8px 10px;
-  margin: 1px 8px; border-radius: var(--radius-sm); cursor: pointer;
-  color: var(--sidebar-text); font-size: 13px; font-weight: 400;
-  transition: background var(--transition), color var(--transition); position: relative;
-  white-space: nowrap; overflow: hidden; user-select: none;
-}
-.nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.8); }
-.nav-item.active { background: rgba(92,95,239,0.2); color: #A5B4FC; }
-.nav-item.active i { color: var(--accent2); }
-.nav-item i { font-size: 17px; flex-shrink: 0; }
-.nav-badge {
-  margin-left: auto; background: var(--accent); color: #fff; font-size: 9.5px; font-weight: 600;
-  padding: 2px 6px; border-radius: 20px; flex-shrink: 0;
-}
-
-.sidebar-footer {
-  margin-top: auto; padding: 12px 10px; border-top: 1px solid var(--sidebar-border);
-  display: flex; align-items: center; gap: 9px; cursor: pointer;
-}
-.sidebar-footer:hover .user-info { opacity: 0.8; }
-.user-avatar-sm {
-  width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #8B5CF6);
-  display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;
-  color: #fff; flex-shrink: 0; letter-spacing: 0.5px;
-}
-.user-info { flex: 1; min-width: 0; overflow: hidden; }
-.user-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.85); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.user-role { font-size: 10px; color: rgba(255,255,255,0.3); }
-
-/* ── MAIN ──────────────────────────────────────────────── */
-#main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
-
-/* ── TOPBAR ────────────────────────────────────────────── */
-#topbar {
-  height: 54px; background: var(--surface); border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; padding: 0 20px; gap: 12px; flex-shrink: 0;
-  box-shadow: var(--shadow-sm);
-}
-#topbar .page-title { font-size: 15px; font-weight: 600; color: var(--text); }
-#topbar .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
-
-.search-bar {
-  display: flex; align-items: center; gap: 7px; background: var(--surface2);
-  border: 1px solid var(--border); border-radius: var(--radius-sm);
-  padding: 6px 12px; width: 220px; cursor: text;
-}
-.search-bar i { font-size: 14px; color: var(--text3); }
-.search-bar span { font-size: 12px; color: var(--text3); }
-
-.btn {
-  display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px;
-  border-radius: var(--radius-sm); font-size: 12px; font-weight: 500; font-family: var(--font);
-  cursor: pointer; border: 1px solid var(--border2); background: var(--surface);
-  color: var(--text); transition: background var(--transition), box-shadow var(--transition);
-}
-.btn:hover { background: var(--surface2); }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: 0 2px 10px rgba(92,95,239,0.3); }
-.btn.primary:hover { background: #4B4EDE; box-shadow: 0 4px 16px rgba(92,95,239,0.4); }
-.btn.icon { padding: 7px 9px; }
-.btn i { font-size: 15px; }
-
-/* ── CONTENT ───────────────────────────────────────────── */
-#content { flex: 1; overflow-y: auto; overflow-x: hidden; background: var(--bg); }
-.view { display: none; animation: fadeIn 0.18s ease; }
-.view.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-
-/* ── DASHBOARD ─────────────────────────────────────────── */
-.dash-wrap { padding: 20px; }
-.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
-.kpi-card {
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
-  padding: 16px 18px; position: relative; overflow: hidden; transition: box-shadow var(--transition);
-}
-.kpi-card:hover { box-shadow: var(--shadow); }
-.kpi-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-}
-.kpi-card:nth-child(1)::before { background: var(--accent); }
-.kpi-card:nth-child(2)::before { background: var(--green); }
-.kpi-card:nth-child(3)::before { background: var(--orange); }
-.kpi-card:nth-child(4)::before { background: var(--purple); }
-.kpi-label { font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
-.kpi-value { font-size: 26px; font-weight: 700; color: var(--text); line-height: 1; letter-spacing: -0.5px; }
-.kpi-delta { display: flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 11px; font-weight: 500; }
-.kpi-delta.up { color: var(--success); }
-.kpi-delta.down { color: var(--danger); }
-.kpi-icon {
-  position: absolute; right: 16px; top: 16px; width: 36px; height: 36px; border-radius: 9px;
-  display: flex; align-items: center; justify-content: center;
-}
-.kpi-icon i { font-size: 18px; }
-
-.dash-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 16px; margin-bottom: 16px; }
-.panel {
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
-  overflow: hidden;
-}
-.panel-header {
-  padding: 14px 18px; border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-}
-.panel-title { font-size: 13px; font-weight: 600; color: var(--text); }
-.panel-action { font-size: 11px; color: var(--accent); cursor: pointer; font-weight: 500; }
-.panel-action:hover { color: var(--accent2); text-decoration: underline; }
-
-.pipeline-mini { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
-.pipe-row { display: flex; align-items: center; gap: 10px; }
-.pipe-stage-name { font-size: 12px; color: var(--text2); width: 110px; flex-shrink: 0; }
-.pipe-bar-wrap { flex: 1; height: 7px; background: var(--surface3); border-radius: 10px; overflow: hidden; }
-.pipe-bar { height: 100%; border-radius: 10px; transition: width 0.6s ease; }
-.pipe-count { font-size: 11px; font-weight: 600; color: var(--text); width: 26px; text-align: right; flex-shrink: 0; }
-.pipe-value { font-size: 11px; color: var(--text3); width: 72px; text-align: right; font-family: var(--mono); flex-shrink: 0; }
-
-.activity-list { padding: 0; }
-.activity-item {
-  display: flex; align-items: flex-start; gap: 10px; padding: 11px 16px;
-  border-bottom: 1px solid var(--border); transition: background var(--transition);
-}
-.activity-item:hover { background: var(--surface2); }
-.activity-item:last-child { border-bottom: none; }
-.activity-dot {
-  width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center;
-  justify-content: center; flex-shrink: 0; margin-top: 1px;
-}
-.activity-dot i { font-size: 13px; }
-.act-text { font-size: 12px; color: var(--text); flex: 1; min-width: 0; }
-.act-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
-.act-time { font-size: 10px; color: var(--text3); white-space: nowrap; }
-
-.tasks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 14px 16px; }
-.task-card {
-  display: flex; align-items: flex-start; gap: 9px; padding: 11px;
-  background: var(--surface2); border-radius: var(--radius); border: 1px solid var(--border);
-}
-.task-type-icon { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.task-type-icon i { font-size: 14px; }
-.task-title { font-size: 12px; font-weight: 500; color: var(--text); }
-.task-meta { font-size: 10px; color: var(--text3); margin-top: 3px; }
-.task-card.done .task-title { text-decoration: line-through; opacity: 0.45; }
-
-/* ── PIPELINE / KANBAN ─────────────────────────────────── */
-.kanban-toolbar {
-  padding: 14px 20px; background: var(--surface); border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-}
-.kanban-meta { margin-left: auto; font-size: 11px; color: var(--text3); font-family: var(--mono); }
-.kanban-board { display: flex; gap: 14px; padding: 20px; overflow-x: auto; align-items: flex-start; min-height: calc(100vh - 160px); }
-.kan-col { min-width: 220px; width: 220px; flex-shrink: 0; }
-.kan-col-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 10px; padding: 0 2px;
-}
-.kan-col-title { font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
-.kan-col-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.kan-col-badge {
-  font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px;
-  background: var(--surface3); color: var(--text3);
-}
-.kan-col-body { background: var(--surface2); border-radius: var(--radius); padding: 8px; min-height: 100px; border: 1px solid var(--border); }
-.kan-card {
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 12px; margin-bottom: 8px; cursor: pointer;
-  transition: box-shadow var(--transition), border-color var(--transition), transform var(--transition);
-}
-.kan-card:hover { box-shadow: var(--shadow); border-color: var(--border2); transform: translateY(-1px); }
-.kan-card:last-child { margin-bottom: 0; }
-.kan-card-name { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
-.kan-card-co { font-size: 11px; color: var(--text3); margin-bottom: 8px; }
-.kan-card-footer { display: flex; align-items: center; justify-content: space-between; }
-.kan-card-val { font-size: 12px; font-weight: 700; color: var(--accent); font-family: var(--mono); }
-.kan-card-meta { display: flex; align-items: center; gap: 5px; }
-.kan-card-ch { font-size: 12px; color: var(--text3); }
-.avatar-xs { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #fff; }
-.kan-add-btn {
-  width: 100%; padding: 8px; border: 1.5px dashed var(--border2); border-radius: var(--radius-sm);
-  background: transparent; color: var(--text3); font-size: 11px; font-family: var(--font); cursor: pointer;
-  margin-top: 8px; transition: all var(--transition);
-}
-.kan-add-btn:hover { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); }
-
-/* ── INBOX ─────────────────────────────────────────────── */
-.inbox-layout { display: flex; height: calc(100vh - 54px); }
-.inbox-sidebar { width: 320px; flex-shrink: 0; border-right: 1px solid var(--border); display: flex; flex-direction: column; background: var(--surface); }
-.inbox-filters {
-  padding: 12px; border-bottom: 1px solid var(--border); display: flex; gap: 6px; flex-wrap: wrap;
-}
-.filter-chip {
-  padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500;
-  border: 1px solid var(--border); background: var(--surface2); color: var(--text2);
-  cursor: pointer; transition: all var(--transition);
-}
-.filter-chip.active, .filter-chip:hover { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); }
-.inbox-list { flex: 1; overflow-y: auto; }
-.inbox-item {
-  display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px;
-  border-bottom: 1px solid var(--border); cursor: pointer; transition: background var(--transition);
-  position: relative;
-}
-.inbox-item:hover { background: var(--surface2); }
-.inbox-item.active { background: var(--accent-bg); }
-.inbox-item.unread::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); border-radius: 0 3px 3px 0; }
-.inbox-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; }
-.inbox-name { font-size: 12.5px; font-weight: 600; color: var(--text); }
-.inbox-preview { font-size: 11px; color: var(--text3); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 190px; }
-.inbox-time { font-size: 10px; color: var(--text3); white-space: nowrap; }
-.ch-pill { display: inline-flex; align-items: center; gap: 3px; font-size: 9.5px; font-weight: 600; padding: 2px 7px; border-radius: 10px; margin-top: 4px; }
-.ch-wpp { background: #DCFCE7; color: #15803D; }
-.ch-ig { background: #FCE7F3; color: #BE185D; }
-.ch-mail { background: #EEF2FF; color: #3730A3; }
-.ch-tel { background: #E0F2FE; color: #0369A1; }
-
-.inbox-chat { flex: 1; display: flex; flex-direction: column; background: var(--bg); }
-.chat-header {
-  padding: 14px 20px; background: var(--surface); border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; gap: 12px;
-}
-.chat-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; }
-.chat-name { font-size: 13.5px; font-weight: 600; color: var(--text); }
-.chat-status { font-size: 11px; color: var(--success); }
-.chat-actions { margin-left: auto; display: flex; gap: 7px; }
-.chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
-.msg { max-width: 72%; }
-.msg.in { align-self: flex-start; }
-.msg.out { align-self: flex-end; }
-.msg-bubble {
-  padding: 9px 13px; border-radius: 12px; font-size: 12.5px; line-height: 1.5;
-}
-.msg.in .msg-bubble { background: var(--surface); border: 1px solid var(--border); color: var(--text); border-bottom-left-radius: 4px; }
-.msg.out .msg-bubble { background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
-.msg-time { font-size: 10px; color: var(--text3); margin-top: 4px; padding: 0 2px; }
-.msg.out .msg-time { text-align: right; }
-.chat-input-wrap {
-  padding: 14px 20px; background: var(--surface); border-top: 1px solid var(--border);
-  display: flex; align-items: center; gap: 8px;
-}
-.chat-input {
-  flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 22px;
-  padding: 9px 16px; font-size: 13px; font-family: var(--font); color: var(--text);
-  outline: none; transition: border-color var(--transition);
-}
-.chat-input:focus { border-color: var(--accent); }
-.chat-input::placeholder { color: var(--text3); }
-.send-btn {
-  width: 36px; height: 36px; border-radius: 50%; background: var(--accent); border: none;
-  display: flex; align-items: center; justify-content: center; cursor: pointer;
-  transition: background var(--transition), transform var(--transition);
-}
-.send-btn:hover { background: #4B4EDE; transform: scale(1.05); }
-.send-btn i { font-size: 15px; color: #fff; }
-
-/* ── CONTACTS ──────────────────────────────────────────── */
-.contacts-toolbar {
-  padding: 14px 20px; background: var(--surface); border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; gap: 10px;
-}
-.contacts-count { margin-left: auto; font-size: 11px; color: var(--text3); font-family: var(--mono); }
-.contacts-table { width: 100%; border-collapse: collapse; }
-.contacts-table th {
-  text-align: left; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em;
-  color: var(--text3); padding: 10px 20px; border-bottom: 1px solid var(--border);
-  background: var(--surface); position: sticky; top: 0; z-index: 1;
-}
-.contacts-table td { padding: 11px 20px; border-bottom: 1px solid var(--border); font-size: 12.5px; color: var(--text); }
-.contacts-table tr:hover td { background: var(--surface2); }
-.contact-cell { display: flex; align-items: center; gap: 10px; }
-.ct-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
-.ct-name { font-weight: 500; }
-.ct-email { font-size: 11px; color: var(--text3); }
-.status-badge { display: inline-flex; padding: 3px 9px; border-radius: 10px; font-size: 10.5px; font-weight: 600; }
-.st-ativo { background: var(--success-bg); color: var(--success); }
-.st-proposta { background: var(--accent-bg); color: var(--accent); }
-.st-negociacao { background: var(--warning-bg); color: var(--warning); }
-.st-novo { background: var(--surface3); color: var(--text2); }
-.st-contrato { background: #EFF6FF; color: #1D4ED8; }
-.rating-stars { color: var(--orange); font-size: 11px; }
-
-/* ── AUTOMATIONS ───────────────────────────────────────── */
-.automations-wrap { padding: 20px; }
-.auto-header { margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; }
-.auto-title { font-size: 16px; font-weight: 700; color: var(--text); }
-.auto-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-.auto-card {
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
-  padding: 16px 18px; transition: box-shadow var(--transition); cursor: pointer;
-}
-.auto-card:hover { box-shadow: var(--shadow); }
-.auto-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
-.auto-card-title { font-size: 13px; font-weight: 600; color: var(--text); }
-.auto-card-desc { font-size: 11.5px; color: var(--text2); line-height: 1.6; margin-bottom: 12px; }
-.auto-trigger-chain { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.chain-step { display: flex; align-items: center; gap: 5px; padding: 4px 8px; background: var(--surface2); border-radius: var(--radius-sm); border: 1px solid var(--border); }
-.chain-step i { font-size: 12px; }
-.chain-step span { font-size: 10.5px; color: var(--text2); font-weight: 500; }
-.chain-arrow { color: var(--text3); font-size: 11px; }
-.toggle-switch { position: relative; width: 34px; height: 19px; }
-.toggle-switch input { opacity: 0; width: 0; height: 0; }
-.toggle-slider {
-  position: absolute; inset: 0; border-radius: 10px; background: var(--surface3);
-  cursor: pointer; transition: background var(--transition);
-}
-.toggle-slider::before {
-  content: ''; position: absolute; width: 13px; height: 13px; border-radius: 50%;
-  background: #fff; top: 3px; left: 3px; transition: transform var(--transition);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-.toggle-switch input:checked + .toggle-slider { background: var(--accent); }
-.toggle-switch input:checked + .toggle-slider::before { transform: translateX(15px); }
-
-/* ── REPORTS ───────────────────────────────────────────── */
-.reports-wrap { padding: 20px; }
-.chart-placeholder {
-  background: var(--surface2); border-radius: var(--radius); height: 180px;
-  display: flex; align-items: flex-end; justify-content: center; gap: 8px;
-  padding: 16px; overflow: hidden;
-}
-.chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; height: 100%; justify-content: flex-end; }
-.chart-bar { width: 100%; border-radius: 5px 5px 0 0; transition: opacity 0.2s; cursor: pointer; min-height: 4px; }
-.chart-bar:hover { opacity: 0.75; }
-.chart-label { font-size: 9px; color: var(--text3); font-weight: 500; }
-
-/* ── TOOLTIP THEME TOGGLE ──────────────────────────────── */
-#theme-toggle {
-  position: fixed; bottom: 20px; right: 20px; width: 40px; height: 40px;
-  border-radius: 50%; background: var(--sidebar); border: 1px solid var(--sidebar-border);
-  display: flex; align-items: center; justify-content: center; cursor: pointer;
-  box-shadow: var(--shadow-lg); z-index: 9999; transition: transform var(--transition);
-}
-#theme-toggle:hover { transform: scale(1.08); }
-#theme-toggle i { font-size: 17px; color: rgba(255,255,255,0.7); }
-
-/* ── SCROLLBAR ─────────────────────────────────────────── */
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: var(--border2); }
-
-/* ── MODAL ─────────────────────────────────────────────── */
-.modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000;
-  display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px);
-}
-.modal-overlay.open { display: flex; }
-.modal {
-  background: var(--surface); border-radius: var(--radius-lg); padding: 24px;
-  width: 480px; max-width: 94vw; max-height: 90vh; overflow-y: auto;
-  box-shadow: var(--shadow-lg); border: 1px solid var(--border); animation: modalIn 0.2s ease;
-}
-@keyframes modalIn { from { opacity: 0; transform: scale(0.96) translateY(-8px); } to { opacity: 1; transform: none; } }
-.modal-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 18px; }
-.form-group { margin-bottom: 14px; }
-.form-label { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; display: block; }
-.form-input {
-  width: 100%; padding: 8px 12px; border: 1px solid var(--border2); border-radius: var(--radius-sm);
-  font-size: 13px; font-family: var(--font); color: var(--text); background: var(--surface2);
-  outline: none; transition: border-color var(--transition);
-}
-.form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(92,95,239,0.12); }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.modal-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
-
-/* ── RESPONSIVE ────────────────────────────────────────── */
-@media (max-width: 900px) {
-  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-  .dash-grid { grid-template-columns: 1fr; }
-  .auto-grid { grid-template-columns: 1fr; }
-  #sidebar { width: 60px; }
-  .logo-text, .nav-item span, .sidebar-search span, .sidebar-section-label, .user-info, .nav-badge { display: none; }
-  .sidebar-search { justify-content: center; padding: 7px; }
-  .sidebar-footer { justify-content: center; }
-}
-@media (max-width: 600px) {
-  .kpi-grid { grid-template-columns: 1fr 1fr; }
-  .kanban-board { padding: 12px; gap: 10px; }
-  .contacts-table th:nth-child(n+4), .contacts-table td:nth-child(n+4) { display: none; }
-}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#F6F7FA;--surface:#FFF;--surface2:#F0F2F7;--border:rgba(0,0,0,.09);
+    --border2:rgba(0,0,0,.14);--text:#131722;--text2:#5A6178;--text3:#9099B3;
+    --accent:#5C5FEF;--accent-bg:#EEEEFF;--good:#1F9D55;--warn:#C97A0E;--bad:#D14343;
+    --mono:'DM Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.5;padding:24px;font-size:14px}
+  .wrap{max-width:1180px;margin:0 auto}
+  h1{font-size:22px;font-weight:700;margin-bottom:2px}
+  .sub{color:var(--text2);font-size:13px;margin-bottom:20px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:18px}
+  .card h2{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .card h2 .tag{background:var(--accent-bg);color:var(--accent);font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px}
+  label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin:10px 0 4px}
+  input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--border2);border-radius:8px;
+    font-family:inherit;font-size:13px;background:var(--surface);color:var(--text)}
+  textarea{font-family:var(--mono);font-size:12px;min-height:240px;resize:vertical}
+  .row{display:flex;gap:8px}.row>*{flex:1}
+  .mini{font-size:11px;color:var(--text3);margin-top:3px}
+  button{font-family:inherit;font-weight:600;font-size:13px;border:0;border-radius:8px;
+    padding:9px 16px;cursor:pointer;background:var(--accent);color:#fff}
+  button.ghost{background:var(--surface2);color:var(--text)}
+  button.sm{padding:5px 10px;font-size:12px}
+  .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--border)}
+  th{color:var(--text3);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+  td input,td select{padding:5px 6px;font-size:12px}
+  .x{background:transparent;color:var(--bad);padding:4px 8px}
+  .alt{padding:12px;border:1px solid var(--border);border-radius:10px;margin-bottom:10px;background:var(--surface2)}
+  .res-alt{padding:14px;border:1px solid var(--border);border-radius:12px;margin-bottom:12px}
+  .res-alt.win{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
+  .res-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .res-name{font-weight:700;font-size:15px}
+  .pct{font-size:24px;font-weight:700;color:var(--accent);font-family:var(--mono)}
+  .bar{height:9px;background:var(--surface2);border-radius:999px;overflow:hidden;margin:8px 0}
+  .bar>i{display:block;height:100%;background:var(--accent);border-radius:999px}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;font-size:12px;color:var(--text2);margin-top:8px}
+  .stats b{color:var(--text);font-family:var(--mono);font-weight:500}
+  .banner{padding:14px 16px;border-radius:12px;background:var(--accent);color:#fff;font-weight:600;margin-bottom:14px}
+  .torn{font-size:12px}
+  .torn .b{display:flex;align-items:center;gap:8px;margin:5px 0}
+  .torn .b .n{width:170px;color:var(--text2)}
+  .torn .b .t{flex:1;height:10px;background:var(--surface2);border-radius:4px;overflow:hidden}
+  .torn .b .t>i{display:block;height:100%;background:var(--text3)}
+  .flip{color:var(--bad);font-weight:700;font-size:11px}
+  .err{background:#FDECEC;color:var(--bad);border:1px solid #F5C2C2;padding:10px 12px;border-radius:8px;font-size:12px;margin-top:10px;white-space:pre-wrap;font-family:var(--mono)}
+  .ok{color:var(--good);font-size:12px;margin-top:6px}
+  details{margin-top:12px}summary{cursor:pointer;font-size:12px;font-weight:600;color:var(--text2)}
 </style>
 </head>
 <body>
+<div class="wrap">
+  <h1>Estatística &amp; Decisão</h1>
+  <div class="sub">Pesquisa Operacional + árvore de decisão + simulação de Monte Carlo, no navegador. Transforma qualquer problema ou decisão em probabilidades.</div>
 
-<div id="app">
-
-  <!-- ═══ SIDEBAR ═══════════════════════════════════════════ -->
-  <div id="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-mark"><i class="ti ti-layers-intersect"></i></div>
-      <div class="logo-text">PLAN<span>OA</span></div>
-    </div>
-
-    <div class="sidebar-search">
-      <i class="ti ti-search"></i>
-      <span>Buscar...</span>
-    </div>
-
-    <nav style="flex:1; overflow-y:auto; padding:6px 0;">
-      <div class="nav-item active" onclick="nav('dashboard',this)">
-        <i class="ti ti-layout-dashboard"></i><span>Dashboard</span>
-      </div>
-      <div class="nav-item" onclick="nav('pipeline',this)">
-        <i class="ti ti-layout-kanban"></i><span>Pipeline</span>
-      </div>
-      <div class="nav-item" onclick="nav('inbox',this)">
-        <i class="ti ti-message-dots"></i><span>Inbox</span>
-        <span class="nav-badge">7</span>
-      </div>
-      <div class="nav-item" onclick="nav('contacts',this)">
-        <i class="ti ti-users"></i><span>Contatos</span>
-      </div>
-
-      <div class="sidebar-section-label">Gestão</div>
-      <div class="nav-item" onclick="nav('reports',this)">
-        <i class="ti ti-chart-bar"></i><span>Relatórios</span>
-      </div>
-      <a class="nav-item" href="decisao/" style="text-decoration:none;color:inherit;">
-        <i class="ti ti-chart-histogram"></i><span>Estatística &amp; Decisão</span>
-      </a>
-      <div class="nav-item" onclick="nav('automations',this)">
-        <i class="ti ti-robot"></i><span>Automações</span>
-      </div>
-      <div class="nav-item" onclick="nav('dashboard',this)">
-        <i class="ti ti-puzzle"></i><span>Integrações</span>
-      </div>
-      <div class="nav-item" onclick="nav('dashboard',this)">
-        <i class="ti ti-target-arrow"></i><span>Metas</span>
-      </div>
-
-      <div class="sidebar-section-label">Config</div>
-      <div class="nav-item" onclick="nav('dashboard',this)">
-        <i class="ti ti-settings"></i><span>Configurações</span>
-      </div>
-      <div class="nav-item" onclick="nav('dashboard',this)">
-        <i class="ti ti-help-circle"></i><span>Ajuda</span>
-      </div>
-    </nav>
-
-    <div class="sidebar-footer" onclick="openModal()">
-      <div class="user-avatar-sm">BW</div>
-      <div class="user-info">
-        <div class="user-name">Bruno W.</div>
-        <div class="user-role">Administrador</div>
-      </div>
-      <i class="ti ti-dots-vertical" style="font-size:15px;color:rgba(255,255,255,0.25);flex-shrink:0;"></i>
-    </div>
-  </div>
-
-  <!-- ═══ MAIN ═══════════════════════════════════════════════ -->
-  <div id="main">
-
-    <!-- TOP BAR -->
-    <div id="topbar">
-      <button class="btn icon" onclick="toggleSidebar()" title="Menu" style="margin-right:4px;">
-        <i class="ti ti-menu-2"></i>
-      </button>
-      <span class="page-title" id="page-title">Dashboard</span>
-      <div class="topbar-right">
-        <div class="search-bar">
-          <i class="ti ti-search"></i>
-          <span>Buscar leads, contatos...</span>
+  <div class="grid">
+    <div>
+      <div class="card">
+        <h2>1. O problema <span class="tag">obrigatório</span></h2>
+        <label>Decisão (em uma frase)</label>
+        <input id="f_prob" placeholder="Comprar um carro novo ou manter o usado?">
+        <label>Objetivo (o que o número representa)</label>
+        <input id="f_obj" placeholder="Custo total em 30 meses">
+        <div class="row">
+          <div><label>Sentido</label>
+            <select id="f_sent"><option value="min">minimizar (custo)</option><option value="max">maximizar (ganho)</option></select></div>
+          <div><label>Moeda</label><input id="f_moeda" value="R$"></div>
         </div>
-        <button class="btn primary" onclick="openModal()">
-          <i class="ti ti-plus"></i> Novo Lead
-        </button>
-        <button class="btn icon" title="Notificações">
-          <i class="ti ti-bell"></i>
-        </button>
-        <button class="btn icon" onclick="toggleTheme()" title="Tema">
-          <i class="ti ti-sun"></i>
-        </button>
-        <div class="user-avatar-sm" style="width:32px;height:32px;cursor:pointer;font-size:11px;">BW</div>
-      </div>
-    </div>
-
-    <!-- CONTENT -->
-    <div id="content">
-
-      <!-- ── DASHBOARD ─────────────────────────────────────── -->
-      <div class="view active" id="view-dashboard">
-        <div class="dash-wrap">
-
-          <div class="kpi-grid">
-            <div class="kpi-card">
-              <div class="kpi-label">Leads Ativos</div>
-              <div class="kpi-value">142</div>
-              <div class="kpi-delta up"><i class="ti ti-arrow-up" style="font-size:11px;"></i> +12% vs. mês anterior</div>
-              <div class="kpi-icon" style="background:rgba(92,95,239,0.1);">
-                <i class="ti ti-users" style="color:var(--accent);"></i>
-              </div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-label">Negócios Ganhos</div>
-              <div class="kpi-value">38</div>
-              <div class="kpi-delta up"><i class="ti ti-arrow-up" style="font-size:11px;"></i> +8% vs. mês anterior</div>
-              <div class="kpi-icon" style="background:rgba(16,185,129,0.1);">
-                <i class="ti ti-check" style="color:var(--green);"></i>
-              </div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-label">Taxa de Conversão</div>
-              <div class="kpi-value">26.7%</div>
-              <div class="kpi-delta down"><i class="ti ti-arrow-down" style="font-size:11px;"></i> -2.1pp vs. mês anterior</div>
-              <div class="kpi-icon" style="background:rgba(245,158,11,0.1);">
-                <i class="ti ti-percentage" style="color:var(--orange);"></i>
-              </div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-label">Receita Prevista</div>
-              <div class="kpi-value">R$84k</div>
-              <div class="kpi-delta up"><i class="ti ti-arrow-up" style="font-size:11px;"></i> +22% vs. mês anterior</div>
-              <div class="kpi-icon" style="background:rgba(139,92,246,0.1);">
-                <i class="ti ti-currency-dollar" style="color:var(--purple);"></i>
-              </div>
-            </div>
-          </div>
-
-          <div class="dash-grid">
-            <div class="panel">
-              <div class="panel-header">
-                <span class="panel-title">Pipeline — Distribuição por Etapa</span>
-                <span class="panel-action" onclick="nav('pipeline', document.querySelectorAll('.nav-item')[1])">Ver kanban →</span>
-              </div>
-              <div class="pipeline-mini">
-                <div class="pipe-row">
-                  <span class="pipe-stage-name">Novo Lead</span>
-                  <div class="pipe-bar-wrap"><div class="pipe-bar" style="width:100%;background:var(--accent);"></div></div>
-                  <span class="pipe-count">48</span>
-                  <span class="pipe-value">R$ 86.400</span>
-                </div>
-                <div class="pipe-row">
-                  <span class="pipe-stage-name">Qualificado</span>
-                  <div class="pipe-bar-wrap"><div class="pipe-bar" style="width:70.8%;background:#8B5CF6;"></div></div>
-                  <span class="pipe-count">34</span>
-                  <span class="pipe-value">R$ 98.600</span>
-                </div>
-                <div class="pipe-row">
-                  <span class="pipe-stage-name">Proposta</span>
-                  <div class="pipe-bar-wrap"><div class="pipe-bar" style="width:58.3%;background:#EC4899;"></div></div>
-                  <span class="pipe-count">28</span>
-                  <span class="pipe-value">R$ 74.800</span>
-                </div>
-                <div class="pipe-row">
-                  <span class="pipe-stage-name">Negociação</span>
-                  <div class="pipe-bar-wrap"><div class="pipe-bar" style="width:39.5%;background:#F59E0B;"></div></div>
-                  <span class="pipe-count">19</span>
-                  <span class="pipe-value">R$ 51.200</span>
-                </div>
-                <div class="pipe-row">
-                  <span class="pipe-stage-name">Ganho ✓</span>
-                  <div class="pipe-bar-wrap"><div class="pipe-bar" style="width:27%;background:var(--green);"></div></div>
-                  <span class="pipe-count">13</span>
-                  <span class="pipe-value">R$ 84.000</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="panel">
-              <div class="panel-header">
-                <span class="panel-title">Atividade Recente</span>
-                <span class="panel-action">Ver tudo</span>
-              </div>
-              <div class="activity-list">
-                <div class="activity-item"><div class="activity-dot" style="background:rgba(92,95,239,0.12);"><i class="ti ti-message-dots" style="color:var(--accent);font-size:13px;"></i></div><div style="flex:1;min-width:0;"><div class="act-text">Nova mensagem — Ana Paula Souza</div><div class="act-sub">WhatsApp · há 2 min</div></div><span class="act-time">2m</span></div>
-                <div class="activity-item"><div class="activity-dot" style="background:rgba(16,185,129,0.12);"><i class="ti ti-trophy" style="color:var(--green);font-size:13px;"></i></div><div style="flex:1;min-width:0;"><div class="act-text">Negócio ganho — Casa do Marceneiro</div><div class="act-sub">R$ 18.500</div></div><span class="act-time">14m</span></div>
-                <div class="activity-item"><div class="activity-dot" style="background:rgba(8,145,178,0.12);"><i class="ti ti-user-plus" style="color:var(--info);font-size:13px;"></i></div><div style="flex:1;min-width:0;"><div class="act-text">Novo lead — Studio Pixel</div><div class="act-sub">Instagram</div></div><span class="act-time">31m</span></div>
-                <div class="activity-item"><div class="activity-dot" style="background:rgba(245,158,11,0.12);"><i class="ti ti-calendar" style="color:var(--orange);font-size:13px;"></i></div><div style="flex:1;min-width:0;"><div class="act-text">Reunião agendada — Thais Rodrigues</div><div class="act-sub">Sexta, 14h00</div></div><span class="act-time">1h</span></div>
-                <div class="activity-item"><div class="activity-dot" style="background:rgba(220,38,38,0.12);"><i class="ti ti-alert-circle" style="color:var(--danger);font-size:13px;"></i></div><div style="flex:1;min-width:0;"><div class="act-text">Tarefa vencida — Follow-up Unicesumar</div><div class="act-sub">Responsável: Bruno W.</div></div><span class="act-time">3h</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="panel">
-            <div class="panel-header">
-              <span class="panel-title">Tarefas do Dia</span>
-              <span class="panel-action">+ Nova Tarefa</span>
-            </div>
-            <div class="tasks-grid">
-              <div class="task-card done">
-                <div class="task-type-icon" style="background:rgba(8,145,178,0.1);"><i class="ti ti-phone" style="color:var(--info);"></i></div>
-                <div><div class="task-title">Ligar para Marcos Vieira</div><div class="task-meta">Ligação · Concluída</div></div>
-              </div>
-              <div class="task-card">
-                <div class="task-type-icon" style="background:rgba(139,92,246,0.1);"><i class="ti ti-mail" style="color:var(--purple);"></i></div>
-                <div><div class="task-title">Enviar proposta Tintas Darka</div><div class="task-meta">E-mail · Hoje 15h</div></div>
-              </div>
-              <div class="task-card">
-                <div class="task-type-icon" style="background:rgba(245,158,11,0.1);"><i class="ti ti-video" style="color:var(--orange);"></i></div>
-                <div><div class="task-title">Reunião Onboarding Kiwify</div><div class="task-meta">Reunião · Hoje 16h30</div></div>
-              </div>
-              <div class="task-card">
-                <div class="task-type-icon" style="background:rgba(92,95,239,0.1);"><i class="ti ti-message" style="color:var(--accent);"></i></div>
-                <div><div class="task-title">Follow-up Formulle Age</div><div class="task-meta">WhatsApp · Hoje 17h</div></div>
-              </div>
-              <div class="task-card">
-                <div class="task-type-icon" style="background:rgba(16,185,129,0.1);"><i class="ti ti-file-text" style="color:var(--green);"></i></div>
-                <div><div class="task-title">Revisar contrato Unicesumar</div><div class="task-meta">Documento · Amanhã</div></div>
-              </div>
-              <div class="task-card">
-                <div class="task-type-icon" style="background:rgba(220,38,38,0.1);"><i class="ti ti-star" style="color:var(--danger);"></i></div>
-                <div><div class="task-title">Enviar NPS para clientes VIP</div><div class="task-meta">Tarefa · Amanhã</div></div>
-              </div>
-            </div>
-          </div>
-
+        <div class="row">
+          <div><label>Iterações</label><input id="f_iter" type="number" value="50000"></div>
+          <div><label>Seed</label><input id="f_seed" type="number" value="42"></div>
+          <div><label>Limiar "bom" (opc.)</label><input id="f_lim" type="number" placeholder="vazio = ignorar"></div>
         </div>
       </div>
 
-      <!-- ── PIPELINE ───────────────────────────────────────── -->
-      <div class="view" id="view-pipeline">
-        <div class="kanban-toolbar">
-          <button class="btn primary" onclick="openModal()"><i class="ti ti-plus"></i> Novo Negócio</button>
-          <button class="btn"><i class="ti ti-filter"></i> Filtros</button>
-          <button class="btn"><i class="ti ti-sort-descending"></i> Ordenar</button>
-          <button class="btn"><i class="ti ti-chart-bar"></i> Relatório</button>
-          <span class="kanban-meta">142 leads &nbsp;·&nbsp; R$ 394.000 total</span>
-        </div>
-        <div class="kanban-board">
-          <!-- Novo Lead -->
-          <div class="kan-col">
-            <div class="kan-col-header">
-              <span class="kan-col-title"><span class="kan-col-dot" style="background:#5C5FEF;"></span>Novo Lead</span>
-              <span class="kan-col-badge">48</span>
-            </div>
-            <div class="kan-col-body">
-              <div class="kan-card" onclick="openModal()"><div class="kan-card-name">Ana Paula Souza</div><div class="kan-card-co">Moda Feminina SP</div><div class="kan-card-footer"><span class="kan-card-val">R$ 2.400</span><div class="kan-card-meta"><i class="ti ti-brand-whatsapp kan-card-ch"></i><div class="avatar-xs" style="background:#5C5FEF;">AP</div></div></div></div>
-              <div class="kan-card" onclick="openModal()"><div class="kan-card-name">Lucas Ferreira</div><div class="kan-card-co">Studio Pixel</div><div class="kan-card-footer"><span class="kan-card-val">R$ 5.800</span><div class="kan-card-meta"><i class="ti ti-brand-instagram kan-card-ch"></i><div class="avatar-xs" style="background:#0891B2;">LF</div></div></div></div>
-              <div class="kan-card" onclick="openModal()"><div class="kan-card-name">Beatriz Lins</div><div class="kan-card-co">Clínica Bem Estar</div><div class="kan-card-footer"><span class="kan-card-val">R$ 1.200</span><div class="kan-card-meta"><i class="ti ti-brand-whatsapp kan-card-ch"></i><div class="avatar-xs" style="background:#D97706;">BL</div></div></div></div>
-              <div class="kan-card" onclick="openModal()"><div class="kan-card-name">Pedro Costa</div><div class="kan-card-co">Imobiliária Alto</div><div class="kan-card-footer"><span class="kan-card-val">R$ 8.500</span><div class="kan-card-meta"><i class="ti ti-mail kan-card-ch"></i><div class="avatar-xs" style="background:#8B5CF6;">PC</div></div></div></div>
-              <button class="kan-add-btn" onclick="openModal()"><i class="ti ti-plus"></i> Adicionar negócio</button>
-            </div>
-          </div>
-          <!-- Qualificado -->
-          <div class="kan-col">
-            <div class="kan-col-header">
-              <span class="kan-col-title"><span class="kan-col-dot" style="background:#8B5CF6;"></span>Qualificado</span>
-              <span class="kan-col-badge">34</span>
-            </div>
-            <div class="kan-col-body">
-              <div class="kan-card" onclick="openModal()"><div class="kan-card-name">Thais Rodrigues</div><div class="kan-card-co">Fashion Store</div><div class="kan-card-footer"><span class="kan-card-val">R$ 3.900</span><div class="kan-card-meta"><i class="ti ti-brand-whatsapp kan-card-ch"></i><div class="avatar-xs" style="background:#5C5FEF;">TR</div></div></div></div>
-              <div class="kan-card" onclick="openModal()"><div class="kan-card-name">Marco Antunes</div><div class="kan-card-co">Consultoria MA</div><div class="kan-card-footer"><span class="kan-card-val">R$ 12.000</span><div class="kan-card-meta"><i class="ti ti-mail kan-card-ch"></i><div class="avatar-xs" style="background:#16A34A;">MA</div></div></div></div>
-              <div class="kan-card" onclick="openModal()"><div class="kan-card-name">Carla Nunes</div><div class="kan-card-co">Studio Denise</div><div class="kan-card-footer"><span class="kan-card-val">R$ 2.100</span><div class="kan-card-meta"><i class="ti ti-brand-instagram kan-card-ch"></i><div class="avatar-xs" style="background:#D97706;">CN</div></div></div></div>
-              <button class="kan-add-btn" onclick="openModal()"><i class="ti ti-plus"></i> Adicionar negócio</button>
-            </div>
-          </div>
-          <!-- Proposta -->
-          <div class="kan-col">
-            <div class="kan-col-header">
-              <span class="kan-col-title"><span class="kan-col-dot" style="background:#EC4899;"></span>Proposta</span>
-              <span class="kan-col-badge">28</span>
-            </div>
-            <div class="kan-col-body">
-              <div class="kan-card" onclick="openModal()"><div class="kan-card-name">Casa do Marceneiro</div><div class="kan-card-co">Ferramentas Lages</div><div class="kan-card-footer"><span class="kan-card-val">R$ 18.500</span><div class="kan-card-meta"><i class="ti ti-brand-whatsapp kan-card-ch"></i><div class="avatar-xs" style="background:#5C5FEF;">CM</div></div></div></div>
-              <div class="kan-card" onclick="openModal()"><div class="kan-card-name">Formulle Age</div><div class="kan-card-co">Nutraceuticos</div><div class="kan-card-footer"><span class="kan-card-val">R$ 7.200</span><div class="kan-card-meta"><i class="ti ti-mail kan-card-ch"></i><div class="avatar-xs" style="background:#0891B2;">FA</div></div></div></div>
-              <button class="kan-add-btn" onclick="openModal()"><i class="ti ti-plus"></i> Adicionar negócio</button>
-            </div>
-          </div>
-          <!-- Negociação -->
-          <div class="kan-col">
-            <div class="kan-col-header">
-              <span class="kan-col-title"><span class="kan-col-dot" style="background:#F59E0B;"></span>Negociação</span>
-              <span class="kan-col-badge">19</span>
-            </div>
-            <div class="kan-col-body">
-              <div class="kan-card" onclick="openModal()"><div class="kan-card-name">Unicesumar EaD</div><div class="kan-card-co">Educação</div><div class="kan-card-footer"><span class="kan-card-val">R$ 24.000</span><div class="kan-card-meta"><i class="ti ti-mail kan-card-ch"></i><div class="avatar-xs" style="background:#8B5CF6;">UC</div></div></div></div>
-              <div class="kan-card" onclick="openModal()"><div class="kan-card-name">Tintas Darka</div><div class="kan-card-co">E-commerce</div><div class="kan-card-footer"><span class="kan-card-val">R$ 9.800</span><div class="kan-card-meta"><i class="ti ti-brand-whatsapp kan-card-ch"></i><div class="avatar-xs" style="background:#D97706;">TD</div></div></div></div>
-              <button class="kan-add-btn" onclick="openModal()"><i class="ti ti-plus"></i> Adicionar negócio</button>
-            </div>
-          </div>
-          <!-- Ganho -->
-          <div class="kan-col">
-            <div class="kan-col-header">
-              <span class="kan-col-title"><span class="kan-col-dot" style="background:#16A34A;"></span>Ganho ✓</span>
-              <span class="kan-col-badge">13</span>
-            </div>
-            <div class="kan-col-body">
-              <div class="kan-card" onclick="openModal()"><div class="kan-card-name">Rede Derli</div><div class="kan-card-co">Unicesumar Polo</div><div class="kan-card-footer"><span class="kan-card-val">R$ 14.400</span><div class="kan-card-meta"><i class="ti ti-mail kan-card-ch"></i><div class="avatar-xs" style="background:#16A34A;">RD</div></div></div></div>
-              <button class="kan-add-btn" onclick="openModal()"><i class="ti ti-plus"></i> Adicionar negócio</button>
-            </div>
-          </div>
-        </div>
+      <div class="card">
+        <h2>2. Incertezas (distribuições)</h2>
+        <div class="mini">Tudo que você não sabe ao certo. Tipos: const, uniforme, triangular, pert, normal, lognormal, bernoulli.</div>
+        <table id="t_par"><thead><tr><th>Nome</th><th>Tipo</th><th>Parâmetros</th><th></th></tr></thead><tbody></tbody></table>
+        <div class="btns"><button class="ghost sm" onclick="addParam()">+ incerteza</button></div>
       </div>
 
-      <!-- ── INBOX ──────────────────────────────────────────── -->
-      <div class="view" id="view-inbox">
-        <div class="inbox-layout">
-          <div class="inbox-sidebar">
-            <div class="inbox-filters">
-              <span class="filter-chip active">Todos (32)</span>
-              <span class="filter-chip">WhatsApp (18)</span>
-              <span class="filter-chip">Instagram (7)</span>
-              <span class="filter-chip">E-mail (5)</span>
-            </div>
-            <div class="inbox-list">
-              <div class="inbox-item unread active" onclick="selectInbox(this,'Ana Paula Souza','AP','#5C5FEF')">
-                <div class="inbox-avatar" style="background:#5C5FEF;">AP</div>
-                <div style="flex:1;min-width:0;">
-                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:4px;"><span class="inbox-name">Ana Paula Souza</span><span class="inbox-time">agora</span></div>
-                  <div class="inbox-preview">Oi! Quero saber mais sobre o plano avançado de automações...</div>
-                  <span class="ch-pill ch-wpp"><i class="ti ti-brand-whatsapp" style="font-size:10px;"></i> WhatsApp</span>
-                </div>
-              </div>
-              <div class="inbox-item unread" onclick="selectInbox(this,'Casa do Marceneiro','CM','#0891B2')">
-                <div class="inbox-avatar" style="background:#0891B2;">CM</div>
-                <div style="flex:1;min-width:0;">
-                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:4px;"><span class="inbox-name">Casa do Marceneiro</span><span class="inbox-time">3m</span></div>
-                  <div class="inbox-preview">Recebi a proposta, vou analisar com meu sócio...</div>
-                  <span class="ch-pill ch-wpp"><i class="ti ti-brand-whatsapp" style="font-size:10px;"></i> WhatsApp</span>
-                </div>
-              </div>
-              <div class="inbox-item unread" onclick="selectInbox(this,'Thais Rodrigues','TR','#EC4899')">
-                <div class="inbox-avatar" style="background:#EC4899;">TR</div>
-                <div style="flex:1;min-width:0;">
-                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:4px;"><span class="inbox-name">Thais Rodrigues</span><span class="inbox-time">12m</span></div>
-                  <div class="inbox-preview">Consegue adiantar o layout da loja?</div>
-                  <span class="ch-pill ch-ig"><i class="ti ti-brand-instagram" style="font-size:10px;"></i> Instagram</span>
-                </div>
-              </div>
-              <div class="inbox-item" onclick="selectInbox(this,'Formulle Age','FA','#D97706')">
-                <div class="inbox-avatar" style="background:#D97706;">FA</div>
-                <div style="flex:1;min-width:0;">
-                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:4px;"><span class="inbox-name">Formulle Age</span><span class="inbox-time">28m</span></div>
-                  <div class="inbox-preview">Re: Proposta Comercial — Consultoria Digital 360°</div>
-                  <span class="ch-pill ch-mail"><i class="ti ti-mail" style="font-size:10px;"></i> E-mail</span>
-                </div>
-              </div>
-              <div class="inbox-item" onclick="selectInbox(this,'Lucas Ferreira','LF','#16A34A')">
-                <div class="inbox-avatar" style="background:#16A34A;">LF</div>
-                <div style="flex:1;min-width:0;">
-                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:4px;"><span class="inbox-name">Lucas Ferreira</span><span class="inbox-time">1h</span></div>
-                  <div class="inbox-preview">Obrigado pela apresentação de ontem, muito completa!</div>
-                  <span class="ch-pill ch-wpp"><i class="ti ti-brand-whatsapp" style="font-size:10px;"></i> WhatsApp</span>
-                </div>
-              </div>
-              <div class="inbox-item" onclick="selectInbox(this,'Unicesumar EaD','UC','#8B5CF6')">
-                <div class="inbox-avatar" style="background:#8B5CF6;">UC</div>
-                <div style="flex:1;min-width:0;">
-                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:4px;"><span class="inbox-name">Unicesumar EaD</span><span class="inbox-time">2h</span></div>
-                  <div class="inbox-preview">Precisamos revisar os KPIs do contrato antes de assinar</div>
-                  <span class="ch-pill ch-mail"><i class="ti ti-mail" style="font-size:10px;"></i> E-mail</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="inbox-chat">
-            <div class="chat-header">
-              <div class="chat-avatar" id="chat-av" style="background:#5C5FEF;">AP</div>
-              <div>
-                <div class="chat-name" id="chat-name">Ana Paula Souza</div>
-                <div class="chat-status"><i class="ti ti-circle-filled" style="font-size:8px;"></i> Online agora</div>
-              </div>
-              <div class="chat-actions">
-                <button class="btn icon"><i class="ti ti-phone"></i></button>
-                <button class="btn icon"><i class="ti ti-user"></i></button>
-                <button class="btn icon"><i class="ti ti-dots-vertical"></i></button>
-              </div>
-            </div>
-            <div class="chat-messages" id="chat-messages">
-              <div class="msg in"><div class="msg-bubble">Oi! Quero saber mais sobre o plano avançado de automações do PLANOA. Vocês trabalham com WhatsApp API?</div><div class="msg-time">14:22</div></div>
-              <div class="msg out"><div class="msg-bubble">Olá, Ana! Sim, trabalhamos com a API oficial do WhatsApp Business. Posso te explicar como funciona? 😊</div><div class="msg-time">14:24</div></div>
-              <div class="msg in"><div class="msg-bubble">Sim! Tenho uma loja de moda feminina e quero automatizar o atendimento no WhatsApp.</div><div class="msg-time">14:25</div></div>
-              <div class="msg out"><div class="msg-bubble">Perfeito! Com o PLANOA você consegue criar fluxos automáticos de atendimento, enviar catálogos de produtos, recuperar carrinhos abandonados e muito mais. Posso agendar uma demonstração?</div><div class="msg-time">14:26</div></div>
-              <div class="msg in"><div class="msg-bubble">Com certeza! Que horários têm disponíveis esta semana?</div><div class="msg-time">14:27</div></div>
-            </div>
-            <div class="chat-input-wrap">
-              <button class="btn icon"><i class="ti ti-paperclip"></i></button>
-              <button class="btn icon"><i class="ti ti-mood-smile"></i></button>
-              <input class="chat-input" id="chat-input" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter')sendMsg()">
-              <button class="send-btn" onclick="sendMsg()"><i class="ti ti-send-2"></i></button>
-            </div>
-          </div>
-        </div>
+      <div class="card">
+        <h2>3. Alternativas</h2>
+        <div class="mini">Cada opção (inclua sempre "não fazer nada"). Constantes: <code>nome=valor; nome=valor</code>. Fórmula usa constantes e incertezas: <code>+ - * / ** %</code>, funções <code>min max abs exp log sqrt</code>.</div>
+        <div id="alts"></div>
+        <div class="btns"><button class="ghost sm" onclick="addAlt()">+ alternativa</button></div>
       </div>
 
-      <!-- ── CONTACTS ───────────────────────────────────────── -->
-      <div class="view" id="view-contacts">
-        <div class="contacts-toolbar">
-          <button class="btn primary" onclick="openModal()"><i class="ti ti-user-plus"></i> Novo Contato</button>
-          <button class="btn"><i class="ti ti-upload"></i> Importar CSV</button>
-          <button class="btn"><i class="ti ti-download"></i> Exportar</button>
-          <button class="btn"><i class="ti ti-filter"></i> Filtros</button>
-          <span class="contacts-count">284 contatos ativos</span>
-        </div>
-        <div style="overflow-x:auto;">
-          <table class="contacts-table">
-            <thead>
-              <tr>
-                <th>Nome / E-mail</th>
-                <th>Empresa</th>
-                <th>Canal</th>
-                <th>Status</th>
-                <th>Score</th>
-                <th>Responsável</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td><div class="contact-cell"><div class="ct-avatar" style="background:#5C5FEF;">AP</div><div><div class="ct-name">Ana Paula Souza</div><div class="ct-email">ana@modafem.com.br</div></div></div></td><td style="color:var(--text2);">Moda Feminina SP</td><td><span class="ch-pill ch-wpp" style="font-size:10px;"><i class="ti ti-brand-whatsapp" style="font-size:10px;"></i> WhatsApp</span></td><td><span class="status-badge st-ativo">Ativo</span></td><td><span class="rating-stars">★★★★★</span></td><td style="color:var(--text2);">Bruno W.</td></tr>
-              <tr><td><div class="contact-cell"><div class="ct-avatar" style="background:#0891B2;">CM</div><div><div class="ct-name">Casa do Marceneiro</div><div class="ct-email">contato@marceneiro.com.br</div></div></div></td><td style="color:var(--text2);">Ferramentas Lages</td><td><span class="ch-pill ch-wpp" style="font-size:10px;"><i class="ti ti-brand-whatsapp" style="font-size:10px;"></i> WhatsApp</span></td><td><span class="status-badge st-proposta">Proposta</span></td><td><span class="rating-stars">★★★★☆</span></td><td style="color:var(--text2);">Bruno W.</td></tr>
-              <tr><td><div class="contact-cell"><div class="ct-avatar" style="background:#EC4899;">TR</div><div><div class="ct-name">Thais Rodrigues</div><div class="ct-email">thais@fashionstore.com</div></div></div></td><td style="color:var(--text2);">Fashion Store</td><td><span class="ch-pill ch-ig" style="font-size:10px;"><i class="ti ti-brand-instagram" style="font-size:10px;"></i> Instagram</span></td><td><span class="status-badge st-ativo">Ativo</span></td><td><span class="rating-stars">★★★★★</span></td><td style="color:var(--text2);">Bruno W.</td></tr>
-              <tr><td><div class="contact-cell"><div class="ct-avatar" style="background:#D97706;">FA</div><div><div class="ct-name">Formulle Age</div><div class="ct-email">comercial@formulleage.com</div></div></div></td><td style="color:var(--text2);">Nutraceuticos</td><td><span class="ch-pill ch-mail" style="font-size:10px;"><i class="ti ti-mail" style="font-size:10px;"></i> E-mail</span></td><td><span class="status-badge st-negociacao">Negociação</span></td><td><span class="rating-stars">★★★★☆</span></td><td style="color:var(--text2);">Bruno W.</td></tr>
-              <tr><td><div class="contact-cell"><div class="ct-avatar" style="background:#16A34A;">RD</div><div><div class="ct-name">Rede Derli</div><div class="ct-email">rede@derli.edu.br</div></div></div></td><td style="color:var(--text2);">Unicesumar Polo</td><td><span class="ch-pill ch-mail" style="font-size:10px;"><i class="ti ti-mail" style="font-size:10px;"></i> E-mail</span></td><td><span class="status-badge st-contrato">Contrato</span></td><td><span class="rating-stars">★★★★★</span></td><td style="color:var(--text2);">Bruno W.</td></tr>
-              <tr><td><div class="contact-cell"><div class="ct-avatar" style="background:#8B5CF6;">UC</div><div><div class="ct-name">Unicesumar EaD</div><div class="ct-email">polo@unicesumar.edu.br</div></div></div></td><td style="color:var(--text2);">Educação EaD</td><td><span class="ch-pill ch-mail" style="font-size:10px;"><i class="ti ti-mail" style="font-size:10px;"></i> E-mail</span></td><td><span class="status-badge st-negociacao">Negociação</span></td><td><span class="rating-stars">★★★☆☆</span></td><td style="color:var(--text2);">Bruno W.</td></tr>
-              <tr><td><div class="contact-cell"><div class="ct-avatar" style="background:#D97706;">SD</div><div><div class="ct-name">Studio Denise de Paula</div><div class="ct-email">studio@denisepaula.com.br</div></div></div></td><td style="color:var(--text2);">Micropigmentação</td><td><span class="ch-pill ch-ig" style="font-size:10px;"><i class="ti ti-brand-instagram" style="font-size:10px;"></i> Instagram</span></td><td><span class="status-badge st-ativo">Ativo</span></td><td><span class="rating-stars">★★★★☆</span></td><td style="color:var(--text2);">Bruno W.</td></tr>
-              <tr><td><div class="contact-cell"><div class="ct-avatar" style="background:#0891B2;">LF</div><div><div class="ct-name">Lucas Ferreira</div><div class="ct-email">lucas@studiopixel.com.br</div></div></div></td><td style="color:var(--text2);">Studio Pixel</td><td><span class="ch-pill ch-ig" style="font-size:10px;"><i class="ti ti-brand-instagram" style="font-size:10px;"></i> Instagram</span></td><td><span class="status-badge st-novo">Novo</span></td><td><span class="rating-stars">★★★☆☆</span></td><td style="color:var(--text2);">Bruno W.</td></tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="btns">
+        <button onclick="run()">▶ Rodar análise</button>
+        <button class="ghost" onclick="loadCarro()">Carregar exemplo (carro)</button>
+        <button class="ghost" onclick="syncToJson()">Gerar JSON ↓</button>
       </div>
+      <div id="err"></div>
 
-      <!-- ── REPORTS ─────────────────────────────────────────── -->
-      <div class="view" id="view-reports">
-        <div class="reports-wrap">
-          <div class="kpi-grid" style="margin-bottom:20px;">
-            <div class="kpi-card"><div class="kpi-label">Receita Mai/25</div><div class="kpi-value">R$84k</div><div class="kpi-delta up"><i class="ti ti-arrow-up" style="font-size:11px;"></i> +22%</div></div>
-            <div class="kpi-card"><div class="kpi-label">Ticket Médio</div><div class="kpi-value">R$ 2.210</div><div class="kpi-delta up"><i class="ti ti-arrow-up" style="font-size:11px;"></i> +5%</div></div>
-            <div class="kpi-card"><div class="kpi-label">Ciclo Médio</div><div class="kpi-value">18 dias</div><div class="kpi-delta down"><i class="ti ti-arrow-down" style="font-size:11px;"></i> -3 dias</div></div>
-            <div class="kpi-card"><div class="kpi-label">NPS Score</div><div class="kpi-value">72</div><div class="kpi-delta up"><i class="ti ti-arrow-up" style="font-size:11px;"></i> +4 pts</div></div>
-          </div>
-          <div class="dash-grid">
-            <div class="panel">
-              <div class="panel-header"><span class="panel-title">Receita Mensal — Últimos 6 meses</span></div>
-              <div style="padding:16px;">
-                <div class="chart-placeholder" id="revenue-chart"></div>
-                <div style="display:flex;justify-content:center;gap:12px;margin-top:8px;">
-                  <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);"><span style="width:10px;height:10px;border-radius:3px;background:var(--accent);display:inline-block;"></span>Receita</div>
-                  <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);"><span style="width:10px;height:10px;border-radius:3px;background:var(--green);display:inline-block;"></span>Meta</div>
-                </div>
-              </div>
-            </div>
-            <div class="panel">
-              <div class="panel-header"><span class="panel-title">Canais de Origem</span></div>
-              <div style="padding:16px;display:flex;flex-direction:column;gap:12px;">
-                <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px;"><span>WhatsApp</span><span style="font-weight:600;">56%</span></div><div style="height:7px;background:var(--surface3);border-radius:10px;overflow:hidden;"><div style="height:100%;width:56%;background:var(--green);border-radius:10px;"></div></div></div>
-                <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px;"><span>Instagram</span><span style="font-weight:600;">22%</span></div><div style="height:7px;background:var(--surface3);border-radius:10px;overflow:hidden;"><div style="height:100%;width:22%;background:var(--pink);border-radius:10px;"></div></div></div>
-                <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px;"><span>E-mail</span><span style="font-weight:600;">14%</span></div><div style="height:7px;background:var(--surface3);border-radius:10px;overflow:hidden;"><div style="height:100%;width:14%;background:var(--accent);border-radius:10px;"></div></div></div>
-                <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px;"><span>Formulário</span><span style="font-weight:600;">8%</span></div><div style="height:7px;background:var(--surface3);border-radius:10px;overflow:hidden;"><div style="height:100%;width:8%;background:var(--orange);border-radius:10px;"></div></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── AUTOMATIONS ─────────────────────────────────────── -->
-      <div class="view" id="view-automations">
-        <div class="automations-wrap">
-          <div class="auto-header">
-            <span class="auto-title">Automações & Salesbot</span>
-            <button class="btn primary"><i class="ti ti-plus"></i> Nova Automação</button>
-          </div>
-          <div class="auto-grid">
-            <div class="auto-card">
-              <div class="auto-card-header">
-                <div>
-                  <div class="auto-card-title">🤖 Boas-vindas WhatsApp</div>
-                </div>
-                <label class="toggle-switch"><input type="checkbox" checked onchange=""><span class="toggle-slider"></span></label>
-              </div>
-              <div class="auto-card-desc">Envia mensagem de boas-vindas automática para todo novo lead que chegar pelo WhatsApp, apresenta o atendente e agenda o próximo contato.</div>
-              <div class="auto-trigger-chain">
-                <div class="chain-step"><i class="ti ti-brand-whatsapp" style="color:var(--green);"></i><span>Nova mensagem</span></div>
-                <span class="chain-arrow">→</span>
-                <div class="chain-step"><i class="ti ti-message-dots" style="color:var(--accent);"></i><span>Enviar boas-vindas</span></div>
-                <span class="chain-arrow">→</span>
-                <div class="chain-step"><i class="ti ti-clock" style="color:var(--orange);"></i><span>Aguardar 5min</span></div>
-              </div>
-            </div>
-            <div class="auto-card">
-              <div class="auto-card-header">
-                <div>
-                  <div class="auto-card-title">📩 Follow-up Automático</div>
-                </div>
-                <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
-              </div>
-              <div class="auto-card-desc">Após 3 dias sem resposta na etapa "Proposta", envia um follow-up automático e cria uma tarefa para o responsável entrar em contato.</div>
-              <div class="auto-trigger-chain">
-                <div class="chain-step"><i class="ti ti-clock-pause" style="color:var(--orange);"></i><span>3 dias sem resposta</span></div>
-                <span class="chain-arrow">→</span>
-                <div class="chain-step"><i class="ti ti-mail" style="color:var(--accent);"></i><span>Enviar follow-up</span></div>
-                <span class="chain-arrow">→</span>
-                <div class="chain-step"><i class="ti ti-check" style="color:var(--green);"></i><span>Criar tarefa</span></div>
-              </div>
-            </div>
-            <div class="auto-card">
-              <div class="auto-card-header">
-                <div>
-                  <div class="auto-card-title">🎯 Distribuição Round Robin</div>
-                </div>
-                <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
-              </div>
-              <div class="auto-card-desc">Distribui novos leads igualmente entre os atendentes disponíveis, garantindo uma divisão justa e rápida atribuição de responsável.</div>
-              <div class="auto-trigger-chain">
-                <div class="chain-step"><i class="ti ti-user-plus" style="color:var(--info);"></i><span>Novo lead</span></div>
-                <span class="chain-arrow">→</span>
-                <div class="chain-step"><i class="ti ti-arrows-shuffle" style="color:var(--purple);"></i><span>Round Robin</span></div>
-                <span class="chain-arrow">→</span>
-                <div class="chain-step"><i class="ti ti-user-check" style="color:var(--green);"></i><span>Atribuir</span></div>
-              </div>
-            </div>
-            <div class="auto-card">
-              <div class="auto-card-header">
-                <div>
-                  <div class="auto-card-title">⭐ NPS Pós-venda</div>
-                </div>
-                <label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label>
-              </div>
-              <div class="auto-card-desc">48h após marcar um negócio como ganho, envia pesquisa de satisfação NPS pelo WhatsApp e registra a nota automaticamente no CRM.</div>
-              <div class="auto-trigger-chain">
-                <div class="chain-step"><i class="ti ti-trophy" style="color:var(--green);"></i><span>Negócio ganho</span></div>
-                <span class="chain-arrow">→</span>
-                <div class="chain-step"><i class="ti ti-clock" style="color:var(--orange);"></i><span>Aguardar 48h</span></div>
-                <span class="chain-arrow">→</span>
-                <div class="chain-step"><i class="ti ti-star" style="color:var(--orange);"></i><span>Enviar NPS</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <details>
+        <summary>JSON do modelo (avançado — suporta árvore de decisão)</summary>
+        <textarea id="json" spellcheck="false"></textarea>
+        <div class="btns"><button class="ghost sm" onclick="runJson()">Rodar este JSON</button>
+        <button class="ghost sm" onclick="copyJson()">Copiar</button></div>
+        <div class="mini">Para nós de chance/árvore use este JSON (esquema em <code>.claude/knowledge/decisao/formato-entrada.md</code>).</div>
+      </details>
     </div>
-  </div>
-</div>
 
-<!-- ═══ MODAL NOVO LEAD ════════════════════════════════════ -->
-<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <div class="modal-title">Novo Lead</div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Nome do Lead *</label>
-        <input class="form-input" placeholder="Ex: Ana Paula Souza">
+    <div>
+      <div class="card" id="resCard" style="display:none">
+        <h2>Resultado <span class="tag" id="resIter"></span></h2>
+        <div id="banner"></div>
+        <div id="resAlts"></div>
+        <h2 style="margin-top:18px">Sensibilidade — o que vira a decisão</h2>
+        <div id="torn" class="torn"></div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Empresa</label>
-        <input class="form-input" placeholder="Ex: Moda Feminina SP">
+      <div class="card" id="hint">
+        <h2>Como funciona</h2>
+        <p style="font-size:13px;color:var(--text2)">
+          Preencha o problema, as incertezas (cada coisa que você "acha" mas não
+          sabe vira uma faixa mín/moda/máx) e as alternativas. Clique
+          <b>Rodar análise</b>. O motor simula milhares de cenários e devolve a
+          <b>probabilidade de cada decisão ser a melhor</b>, o intervalo de
+          resultados e quais incertezas podem virar a decisão.</p>
+        <p style="font-size:13px;color:var(--text2);margin-top:8px">
+          Comece por <b>Carregar exemplo (carro)</b> para ver tudo preenchido.</p>
       </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">WhatsApp</label>
-        <input class="form-input" placeholder="+55 (49) 99999-0000">
-      </div>
-      <div class="form-group">
-        <label class="form-label">E-mail</label>
-        <input class="form-input" placeholder="contato@empresa.com">
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Pipeline</label>
-        <select class="form-input"><option>Pipeline de Vendas</option><option>Pós-venda</option></select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Etapa</label>
-        <select class="form-input"><option>Novo Lead</option><option>Qualificado</option><option>Proposta</option></select>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Valor do Negócio (R$)</label>
-        <input class="form-input" placeholder="0,00">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Canal de Origem</label>
-        <select class="form-input"><option>WhatsApp</option><option>Instagram</option><option>E-mail</option><option>Formulário</option></select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Observações</label>
-      <textarea class="form-input" rows="3" placeholder="Detalhes sobre o lead..."></textarea>
-    </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal()">Cancelar</button>
-      <button class="btn primary" onclick="closeModal()"><i class="ti ti-check"></i> Salvar Lead</button>
     </div>
   </div>
 </div>
 
 <script>
-const views = ['dashboard','pipeline','inbox','contacts','reports','automations'];
-const titles = { dashboard:'Dashboard', pipeline:'Pipeline de Vendas', inbox:'Inbox — Omnichannel', contacts:'Contatos', reports:'Relatórios & Analytics', automations:'Automações & Salesbot' };
+// ===ENGINE START=== (espelha .claude/tools/decisao/decisao.py)
+function makeRng(seed){let s=(seed>>>0)||1;return function(){s|=0;s=s+0x6D2B79F5|0;
+  let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function rNorm(rng,mu,sd){let u=0,v=0;while(u===0)u=rng();while(v===0)v=rng();
+  return mu+sd*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function rGamma(rng,k){ // Marsaglia-Tsang
+  if(k<1){const u=rng();return rGamma(rng,1+k)*Math.pow(u,1/k);}
+  const d=k-1/3,c=1/Math.sqrt(9*d);
+  while(true){let x,v;do{x=rNorm(rng,0,1);v=1+c*x;}while(v<=0);
+    v=v*v*v;const u=rng();
+    if(u<1-0.0331*x*x*x*x)return d*v;
+    if(Math.log(u)<0.5*x*x+d*(1-v+Math.log(v)))return d*v;}}
+function rBeta(rng,a,b){const x=rGamma(rng,a),y=rGamma(rng,b);return x/(x+y);}
+function pert(rng,lo,mo,hi,lamb){lamb=lamb||4;if(hi<=lo)return lo;
+  const a=1+lamb*(mo-lo)/(hi-lo),b=1+lamb*(hi-mo)/(hi-lo);
+  return lo+rBeta(rng,a,b)*(hi-lo);}
+function rTriang(rng,lo,mo,hi){const u=rng(),c=(mo-lo)/(hi-lo);
+  return u<c?lo+Math.sqrt(u*(hi-lo)*(mo-lo)):hi-Math.sqrt((1-u)*(hi-lo)*(hi-mo));}
+function sample(rng,spec){
+  if(typeof spec==='number')return spec;
+  if(!spec||!spec.dist)throw new Error('distribuição inválida');
+  const d=String(spec.dist).toLowerCase();
+  if(d==='const'||d==='constante')return +spec.valor;
+  if(d==='uniforme'||d==='uniform')return +spec.min+rng()*(+spec.max-+spec.min);
+  if(d==='triangular'||d==='triang')return rTriang(rng,+spec.min,+spec.moda,+spec.max);
+  if(d==='pert')return pert(rng,+spec.min,+spec.moda,+spec.max,+spec.lambda||4);
+  if(d==='normal'||d==='gauss')return rNorm(rng,+spec.media,+spec.desvio);
+  if(d==='lognormal'||d==='lognorm')return Math.exp(rNorm(rng,+spec.media_log,+spec.desvio_log));
+  if(d==='bernoulli'||d==='binaria')return rng()<+spec.p?1:0;
+  if(d==='discreta'||d==='discrete'){const v=spec.valores,p=spec.probs,
+    tot=p.reduce((a,x)=>a+x,0);let r=rng()*tot;for(let i=0;i<v.length;i++){r-=p[i];if(r<=0)return +v[i];}return +v[v.length-1];}
+  if(d==='beta')return rBeta(rng,+spec.alpha,+spec.beta);
+  throw new Error('distribuição desconhecida: '+d);}
+function meanOf(spec){
+  if(typeof spec==='number')return spec;
+  const d=String(spec.dist).toLowerCase();
+  if(d==='const'||d==='constante')return +spec.valor;
+  if(d==='uniforme'||d==='uniform')return (+spec.min+ +spec.max)/2;
+  if(d==='triangular'||d==='triang')return (+spec.min+ +spec.moda+ +spec.max)/3;
+  if(d==='pert')return (+spec.min+4*+spec.moda+ +spec.max)/6;
+  if(d==='normal'||d==='gauss')return +spec.media;
+  if(d==='lognormal'||d==='lognorm')return Math.exp(+spec.media_log+Math.pow(+spec.desvio_log,2)/2);
+  if(d==='bernoulli'||d==='binaria')return +spec.p;
+  if(d==='discreta'||d==='discrete'){const v=spec.valores,p=spec.probs,
+    tot=p.reduce((a,x)=>a+x,0);return v.reduce((a,x,i)=>a+x*p[i],0)/tot;}
+  if(d==='beta')return +spec.alpha/(+spec.alpha+ +spec.beta);
+  throw new Error('distribuição desconhecida: '+d);}
 
-function nav(viewKey, el) {
-  views.forEach(v => {
-    const el = document.getElementById('view-'+v);
-    if (el) el.classList.remove('active');
-  });
-  const target = document.getElementById('view-'+viewKey);
-  if (target) target.classList.add('active');
-  document.getElementById('page-title').textContent = titles[viewKey] || viewKey;
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  if (el) el.classList.add('active');
-  if (viewKey === 'reports') setTimeout(buildChart, 100);
+// Avaliador de expressão seguro: tokeniza e parseia (sem eval)
+const FUNCS={min:Math.min,max:Math.max,abs:Math.abs,round:Math.round,
+  exp:Math.exp,log:Math.log,sqrt:Math.sqrt,floor:Math.floor,ceil:Math.ceil};
+function tokenize(s){const t=[];const re=/\s*([A-Za-z_]\w*|\d+\.?\d*|\*\*|<=|>=|==|!=|[-+*/%(),<>])/g;let m,last=0;
+  while((m=re.exec(s))){if(m.index!==last&&s.slice(last,m.index).trim()!=='')throw new Error('token inválido perto de "'+s.slice(last)+'"');t.push(m[1]);last=re.lastIndex;}
+  if(s.slice(last).trim()!=='')throw new Error('token inválido: "'+s.slice(last)+'"');return t;}
+function safeEval(expr,vars){
+  const tk=tokenize(String(expr));let i=0;
+  const peek=()=>tk[i],next=()=>tk[i++];
+  function parseExpr(){ // ternário estilo Python: A if C else B
+    let a=parseCmp();
+    if(peek()==='if'){next();const c=parseCmp();
+      if(next()!=='else')throw new Error('esperado "else"');const b=parseExpr();
+      return c?a:b;}
+    return a;}
+  function parseCmp(){let a=parseAdd();
+    while(['<','<=','>','>=','==','!='].includes(peek())){const op=next(),b=parseAdd();
+      a=op==='<'?a<b:op==='<='?a<=b:op==='>'?a>b:op==='>='?a>=b:op==='=='?a===b:a!==b;}
+    return a;}
+  function parseAdd(){let a=parseMul();
+    while(peek()==='+'||peek()==='-'){const op=next(),b=parseMul();a=op==='+'?a+b:a-b;}return a;}
+  function parseMul(){let a=parseUnary();
+    while(peek()==='*'||peek()==='/'||peek()==='%'){const op=next(),b=parseUnary();
+      a=op==='*'?a*b:op==='/'?a/b:a%b;}return a;}
+  function parseUnary(){if(peek()==='-'){next();return -parseUnary();}
+    if(peek()==='+'){next();return parseUnary();}return parsePow();}
+  function parsePow(){let a=parseAtom();if(peek()==='**'){next();return Math.pow(a,parseUnary());}return a;}
+  function parseAtom(){const t=next();
+    if(t===undefined)throw new Error('expressão incompleta');
+    if(t==='('){const v=parseExpr();if(next()!==')')throw new Error('faltou ")"');return v;}
+    if(/^\d/.test(t))return parseFloat(t);
+    if(/^[A-Za-z_]/.test(t)){
+      if(peek()==='('){next();const args=[];
+        if(peek()!==')'){args.push(parseExpr());while(peek()===','){next();args.push(parseExpr());}}
+        if(next()!==')')throw new Error('faltou ")" em '+t);
+        if(!FUNCS[t])throw new Error('função não permitida: '+t);return FUNCS[t](...args);}
+      if(!(t in vars))throw new Error("variável não definida: '"+t+"'");return vars[t];}
+    throw new Error('token inesperado: '+t);}
+  const r=parseExpr();if(i<tk.length)throw new Error('sobrou: '+tk.slice(i).join(' '));return r;}
+
+function evalTree(node,env){
+  const tipo=node.tipo||'folha';
+  if(tipo==='folha'||tipo==='leaf')
+    return ('valor'in node)?+node.valor:safeEval(node.formula,env);
+  if(tipo==='chance'||tipo==='acaso'){
+    const ramos=node.ramos,probs=[];
+    for(const r of ramos){
+      if(r.p_resto)probs.push(null);
+      else if('p'in r)probs.push(+r.p);
+      else if('p_var'in r)probs.push(+env[r.p_var]);
+      else throw new Error("ramo precisa de 'p','p_var' ou 'p_resto'");}
+    const fixos=probs.filter(p=>p!=null).reduce((a,x)=>a+x,0);
+    const nr=probs.filter(p=>p==null).length;
+    if(nr){const resto=Math.max(0,1-fixos);for(let k=0;k<probs.length;k++)if(probs[k]==null)probs[k]=resto/nr;}
+    const soma=probs.reduce((a,x)=>a+x,0);
+    if(Math.abs(soma-1)>1e-6)throw new Error('probabilidades somam '+soma.toFixed(4)+', não 1');
+    return ramos.reduce((acc,r,k)=>acc+probs[k]*evalTree(r,env),0);}
+  if(tipo==='decisao'||tipo==='decision'){
+    const vs=node.ramos.map(r=>evalTree(r,env));
+    return env._max?Math.max(...vs):Math.min(...vs);}
+  throw new Error('tipo de nó desconhecido: '+tipo);}
+
+function payoff(alt,env,sentidoMax){
+  const base=Object.assign({},env);base._max=sentidoMax?1:0;
+  for(const k in (alt.constantes||{}))base[k]=+alt.constantes[k];
+  if('arvore'in alt){let n=alt.arvore;if(Array.isArray(n))n={tipo:'chance',ramos:n};return evalTree(n,base);}
+  if('formula'in alt)return safeEval(alt.formula,base);
+  throw new Error("alternativa '"+alt.nome+"' precisa de 'formula' ou 'arvore'");}
+
+function percentil(arr,q){const s=[...arr].sort((a,b)=>a-b);if(!s.length)return NaN;
+  const idx=q*(s.length-1),lo=Math.floor(idx),hi=Math.ceil(idx);
+  return lo===hi?s[idx|0]:s[lo]+(s[hi]-s[lo])*(idx-lo);}
+
+function analisar(m){
+  const sentidoMax=['max','maximizar','maximize'].includes(String(m.sentido||'max').toLowerCase());
+  const params=m.parametros||{},alts=m.alternativas,nIter=+m.iteracoes||50000;
+  const limiar=(m.limiar_bom_negocio===undefined||m.limiar_bom_negocio===null||m.limiar_bom_negocio==='')?null:+m.limiar_bom_negocio;
+  const envC={};for(const k in params)envC[k]=meanOf(params[k]);
+  const emv={};for(const a of alts)emv[a.nome]=payoff(a,envC,sentidoMax);
+  const rng=makeRng(+m.seed||42);
+  const dist={},vence={};for(const a of alts){dist[a.nome]=[];vence[a.nome]=0;}
+  for(let it=0;it<nIter;it++){
+    const env={};for(const k in params)env[k]=sample(rng,params[k]);
+    let best=null,bv=null;
+    for(const a of alts){const v=payoff(a,env,sentidoMax);dist[a.nome].push(v);
+      if(bv===null||(sentidoMax?v>bv:v<bv)){bv=v;best=a.nome;}}
+    vence[best]++;}
+  const out={sentido:sentidoMax?'maximizar':'minimizar',iteracoes:nIter,
+    moeda:m.moeda||'',alternativas:[]};
+  for(const a of alts){const d=dist[a.nome],n=d.length;
+    const media=d.reduce((x,y)=>x+y,0)/n;
+    const vr=d.reduce((x,y)=>x+(y-media)*(y-media),0)/n;
+    const rec={nome:a.nome,emv:emv[a.nome],media,desvio:Math.sqrt(vr),
+      p5:percentil(d,.05),p50:percentil(d,.5),p95:percentil(d,.95),
+      prob_melhor:vence[a.nome]/nIter};
+    if(limiar!==null){const bons=d.filter(x=>sentidoMax?x>=limiar:x<=limiar).length;
+      rec.prob_bom=bons/n;rec.limiar=limiar;}
+    out.alternativas.push(rec);}
+  const ord=[...alts].sort((x,y)=>sentidoMax?emv[y.nome]-emv[x.nome]:emv[x.nome]-emv[y.nome]);
+  const rec=ord[0],con=ord[1]||ord[0];
+  out.recomendacao=( sentidoMax?
+    out.alternativas.reduce((a,b)=>b.media>a.media?b:a):
+    out.alternativas.reduce((a,b)=>b.media<a.media?b:a) ).nome;
+  const vant=env=>{const pr=payoff(rec,env,sentidoMax),pc=payoff(con,env,sentidoMax);
+    return sentidoMax?pr-pc:pc-pr;};
+  const rng2=makeRng((+m.seed||42)+1),torn=[];
+  for(const pn in params){
+    const am=[];for(let k=0;k<2000;k++)am.push(sample(rng2,params[pn]));am.sort((a,b)=>a-b);
+    const lo=am[(0.10*am.length)|0],hi=am[(0.90*am.length)|0];
+    const eL=Object.assign({},envC);eL[pn]=lo;const eH=Object.assign({},envC);eH[pn]=hi;
+    const aL=vant(eL),aH=vant(eH);
+    torn.push({parametro:pn,swing:Math.abs(aH-aL),pode_virar:(aL<0||aH<0)});}
+  torn.sort((a,b)=>b.swing-a.swing);
+  out.sensibilidade=torn;
+  out.comparacao={recomendada:rec.nome,concorrente:con.nome,vantagem_central:vant(envC)};
+  return out;}
+// ===ENGINE END===
+
+// ---------- UI ----------
+function fmtMoney(v,c){const s=(Math.round(v*100)/100).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});return (c?c+' ':'')+s;}
+function el(h){const d=document.createElement('div');d.innerHTML=h.trim();return d.firstChild;}
+
+const DIST_FIELDS={const:['valor'],uniforme:['min','max'],triangular:['min','moda','max'],
+  pert:['min','moda','max'],normal:['media','desvio'],lognormal:['media_log','desvio_log'],
+  bernoulli:['p']};
+
+function paramRow(name,dist,vals){
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><input value="${name||''}" placeholder="nome"></td>
+    <td><select>${Object.keys(DIST_FIELDS).map(d=>`<option ${d===dist?'selected':''}>${d}</option>`).join('')}</select></td>
+    <td class="pf"></td><td><button class="x sm" title="remover">✕</button></td>`;
+  const sel=tr.querySelector('select'),pf=tr.querySelector('.pf');
+  function render(){const f=DIST_FIELDS[sel.value];pf.innerHTML='';
+    f.forEach(k=>{const i=document.createElement('input');i.placeholder=k;i.dataset.k=k;i.style.width='80px';i.style.display='inline-block';i.style.marginRight='4px';
+      if(vals&&vals[k]!=null)i.value=vals[k];pf.appendChild(i);});}
+  sel.onchange=render;render();
+  tr.querySelector('.x').onclick=()=>tr.remove();
+  return tr;}
+function addParam(n,d,v){document.querySelector('#t_par tbody').appendChild(paramRow(n,d,v));}
+
+function altBox(a){
+  a=a||{};
+  const b=el(`<div class="alt">
+    <div class="row"><div><label>Nome da alternativa</label><input class="an" value="${a.nome||''}" placeholder="Comprar carro novo"></div>
+    <div style="flex:0 0 90px;display:flex;align-items:flex-end"><button class="x sm">remover</button></div></div>
+    <label>Constantes (nome=valor; nome=valor)</label>
+    <input class="ac" value="${a.constantes?Object.entries(a.constantes).map(([k,v])=>k+'='+v).join('; '):''}" placeholder="preco=100000">
+    <label>Fórmula do resultado</label>
+    <input class="af" value="${a.formula?a.formula.replace(/"/g,'&quot;'):''}" placeholder="preco - valor_revenda + manut">
+  </div>`);
+  b.querySelector('.x').onclick=()=>b.remove();
+  return b;}
+function addAlt(a){document.getElementById('alts').appendChild(altBox(a));}
+
+function readForm(){
+  const params={};
+  document.querySelectorAll('#t_par tbody tr').forEach(tr=>{
+    const n=tr.querySelector('input').value.trim();if(!n)return;
+    const d=tr.querySelector('select').value,o={dist:d};
+    tr.querySelectorAll('.pf input').forEach(i=>o[i.dataset.k]=parseFloat(i.value));
+    params[n]=o;});
+  const alts=[];
+  document.querySelectorAll('#alts .alt').forEach(b=>{
+    const nome=b.querySelector('.an').value.trim();if(!nome)return;
+    const cs={};b.querySelector('.ac').value.split(';').forEach(p=>{
+      const [k,v]=p.split('=');if(k&&k.trim())cs[k.trim()]=parseFloat(v);});
+    alts.push({nome,constantes:cs,formula:b.querySelector('.af').value.trim()});});
+  const lim=document.getElementById('f_lim').value;
+  return{problema:document.getElementById('f_prob').value,
+    objetivo:document.getElementById('f_obj').value,
+    sentido:document.getElementById('f_sent').value,
+    moeda:document.getElementById('f_moeda').value,
+    iteracoes:+document.getElementById('f_iter').value,
+    seed:+document.getElementById('f_seed').value,
+    limiar_bom_negocio:lim===''?null:+lim,
+    parametros:params,alternativas:alts};}
+
+function showError(e){document.getElementById('err').innerHTML='<div class="err">⚠ '+e+'</div>';}
+function clearError(){document.getElementById('err').innerHTML='';}
+
+function render(m,r){
+  clearError();
+  document.getElementById('hint').style.display='none';
+  const C=document.getElementById('resCard');C.style.display='block';
+  document.getElementById('resIter').textContent=r.iteracoes.toLocaleString('pt-BR')+' simulações';
+  const best=r.alternativas.reduce((a,b)=>b.prob_melhor>a.prob_melhor?b:a);
+  document.getElementById('banner').innerHTML=
+    `<div class="banner">Recomendação: <b>${r.recomendacao}</b> — maior chance de ser a melhor decisão (${(best.prob_melhor*100).toFixed(1)}%).</div>`;
+  const RA=document.getElementById('resAlts');RA.innerHTML='';
+  r.alternativas.slice().sort((a,b)=>b.prob_melhor-a.prob_melhor).forEach(a=>{
+    RA.appendChild(el(`<div class="res-alt ${a.nome===r.recomendacao?'win':''}">
+      <div class="res-head"><span class="res-name">${a.nome}</span>
+        <span class="pct">${(a.prob_melhor*100).toFixed(1)}%</span></div>
+      <div style="font-size:11px;color:var(--text3)">probabilidade de ser a MELHOR decisão</div>
+      <div class="bar"><i style="width:${(a.prob_melhor*100).toFixed(1)}%"></i></div>
+      <div class="stats">
+        <span>Valor esperado: <b>${fmtMoney(a.emv,r.moeda)}</b></span>
+        <span>Média: <b>${fmtMoney(a.media,r.moeda)}</b></span>
+        <span>p5–p95: <b>${fmtMoney(a.p5,r.moeda)} … ${fmtMoney(a.p95,r.moeda)}</b></span>
+        ${a.prob_bom!=null?`<span>P(bom | ${fmtMoney(a.limiar,r.moeda)}): <b>${(a.prob_bom*100).toFixed(1)}%</b></span>`:''}
+      </div></div>`));});
+  const T=document.getElementById('torn');
+  const mx=Math.max(...r.sensibilidade.map(t=>t.swing),1e-9);
+  T.innerHTML=`<div style="font-size:12px;color:var(--text2);margin-bottom:8px">Vantagem de <b>${r.comparacao.recomendada}</b> sobre <b>${r.comparacao.concorrente}</b>: ${fmtMoney(r.comparacao.vantagem_central,r.moeda)} (cenário central).</div>`+
+    r.sensibilidade.slice(0,8).map(t=>`<div class="b"><span class="n">${t.parametro}</span>
+      <span class="t"><i style="width:${(100*t.swing/mx).toFixed(0)}%"></i></span>
+      <span>${fmtMoney(t.swing,r.moeda)}</span>${t.pode_virar?'<span class="flip">PODE VIRAR</span>':''}</div>`).join('');
 }
 
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('collapsed');
+function run(){try{const m=readForm();
+  if(!m.alternativas.length)throw new Error('adicione ao menos uma alternativa');
+  syncToJson();render(m,analisar(m));}catch(e){showError(e.message||String(e));}}
+function runJson(){try{const m=JSON.parse(document.getElementById('json').value);
+  render(m,analisar(m));}catch(e){showError(e.message||String(e));}}
+function syncToJson(){try{document.getElementById('json').value=JSON.stringify(readForm(),null,2);}catch(e){}}
+function copyJson(){navigator.clipboard&&navigator.clipboard.writeText(document.getElementById('json').value);}
+
+const CARRO={problema:"Comprar um carro novo (R$ 100.000) ou manter o carro usado?",
+ objetivo:"Custo total em 30 meses",sentido:"min",moeda:"R$",iteracoes:50000,seed:42,
+ limiar_bom_negocio:20000,
+ parametros:{
+  desval_30m:{dist:"pert",min:.30,moda:.42,max:.55},
+  venda_usado_agora:{dist:"pert",min:22000,moda:28000,max:33000},
+  manut_novo_total:{dist:"normal",media:4000,desvio:1500},
+  custo_componentes:{dist:"pert",min:6000,moda:9000,max:14000},
+  manut_ano_usado:{dist:"normal",media:9000,desvio:3000},
+  prob_pane:{dist:"pert",min:.20,moda:.30,max:.45},
+  custo_pane_grave:{dist:"pert",min:12000,moda:18000,max:30000},
+  residual_usado_30m:{dist:"pert",min:12000,moda:16000,max:20000}},
+ alternativas:[
+  {nome:"Comprar carro novo",constantes:{preco_novo:100000},
+   formula:"preco_novo - venda_usado_agora - preco_novo*(1-desval_30m) + manut_novo_total"},
+  {nome:"Manter carro usado",constantes:{anos:2.5},
+   arvore:{tipo:"chance",ramos:[
+     {p_var:"prob_pane",tipo:"folha",formula:"custo_componentes + manut_ano_usado*anos + custo_pane_grave - residual_usado_30m"},
+     {p_resto:true,tipo:"folha",formula:"custo_componentes + manut_ano_usado*anos - residual_usado_30m"}]}}]};
+function loadCarro(){
+  document.getElementById('f_prob').value=CARRO.problema;
+  document.getElementById('f_obj').value=CARRO.objetivo;
+  document.getElementById('f_sent').value=CARRO.sentido;
+  document.getElementById('f_moeda').value=CARRO.moeda;
+  document.getElementById('f_iter').value=CARRO.iteracoes;
+  document.getElementById('f_seed').value=CARRO.seed;
+  document.getElementById('f_lim').value=CARRO.limiar_bom_negocio;
+  const tb=document.querySelector('#t_par tbody');tb.innerHTML='';
+  for(const k in CARRO.parametros){const s=CARRO.parametros[k];addParam(k,s.dist,s);}
+  document.getElementById('alts').innerHTML='';
+  CARRO.alternativas.forEach(a=>addAlt(a.formula?a:{nome:a.nome}));
+  document.getElementById('json').value=JSON.stringify(CARRO,null,2);
+  render(CARRO,analisar(CARRO));
 }
-
-function toggleTheme() {
-  const html = document.documentElement;
-  const isDark = html.getAttribute('data-theme') === 'dark';
-  html.setAttribute('data-theme', isDark ? '' : 'dark');
-  document.querySelector('#topbar .btn.icon:last-of-type i').className = isDark ? 'ti ti-sun' : 'ti ti-moon';
-}
-
-function openModal() { document.getElementById('modal').classList.add('open'); }
-function closeModal() { document.getElementById('modal').classList.remove('open'); }
-
-function selectInbox(el, name, initials, color) {
-  document.querySelectorAll('.inbox-item').forEach(i => i.classList.remove('active'));
-  el.classList.add('active');
-  el.classList.remove('unread');
-  document.getElementById('chat-av').textContent = initials;
-  document.getElementById('chat-av').style.background = color;
-  document.getElementById('chat-name').textContent = name;
-}
-
-function sendMsg() {
-  const input = document.getElementById('chat-input');
-  const text = input.value.trim();
-  if (!text) return;
-  const msgs = document.getElementById('chat-messages');
-  const now = new Date();
-  const time = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
-  const div = document.createElement('div');
-  div.className = 'msg out';
-  div.innerHTML = `<div class="msg-bubble">${text}</div><div class="msg-time">${time}</div>`;
-  msgs.appendChild(div);
-  input.value = '';
-  msgs.scrollTop = msgs.scrollHeight;
-}
-
-function buildChart() {
-  const months = ['Dez','Jan','Fev','Mar','Abr','Mai'];
-  const revenue = [52, 61, 48, 69, 73, 84];
-  const goal = [60, 60, 65, 70, 75, 80];
-  const container = document.getElementById('revenue-chart');
-  if (!container || container.dataset.built) return;
-  container.dataset.built = '1';
-  container.innerHTML = '';
-  const max = Math.max(...revenue, ...goal);
-  months.forEach((m, i) => {
-    const wrap = document.createElement('div');
-    wrap.className = 'chart-bar-wrap';
-    const pct = Math.round((revenue[i]/max)*100);
-    const gPct = Math.round((goal[i]/max)*100);
-    wrap.innerHTML = `
-      <span style="font-size:10px;font-weight:600;color:var(--text2);margin-bottom:4px;">R$${revenue[i]}k</span>
-      <div style="position:relative;width:100%;display:flex;gap:3px;height:${gPct}%;">
-        <div class="chart-bar" style="flex:1;height:${Math.round((revenue[i]/goal[i])*100)}%;background:var(--accent);align-self:flex-end;" title="Receita: R$${revenue[i]}k"></div>
-        <div class="chart-bar" style="flex:1;height:100%;background:var(--green);opacity:0.3;align-self:flex-end;" title="Meta: R$${goal[i]}k"></div>
-      </div>
-      <span class="chart-label">${m}</span>
-    `;
-    container.appendChild(wrap);
-  });
-}
-
-document.getElementById('chat-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') sendMsg();
-});
+// estado inicial
+addParam('exemplo',' pert'.trim(),{min:0,moda:0,max:0});
+addAlt({nome:'Alternativa A',formula:'0'});
+addAlt({nome:'Alternativa B (status quo)',formula:'0'});
 </script>
-
 </body>
 </html>
