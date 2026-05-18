@@ -1,0 +1,43 @@
+# EXEMPLO — Apostar na Mega-Sena ou não?
+# Mostra o motor revelando um VALOR ESPERADO NEGATIVO: na média você perde,
+# mesmo com prêmios enormes, porque a probabilidade de ganhar é mínima.
+# Rode: python3 .claude/tools/decisao/decisao.py .claude/tools/decisao/exemplos/loteria.yaml
+
+problema: "Apostar na Mega-Sena (aposta simples) ou não?"
+objetivo: "Ganho líquido de uma aposta"
+sentido: max
+moeda: "R$"
+horizonte_meses: 0
+iteracoes: 50000
+seed: 42
+limiar_bom_negocio: 0      # "bom" = não sair no prejuízo
+
+parametros:
+  premio:                  # prêmio principal (varia muito por sorteio)
+    dist: pert
+    min: 3000000
+    moda: 45000000
+    max: 350000000
+
+alternativas:
+
+  - nome: "Apostar (1 jogo)"
+    constantes:
+      custo_bilhete: 5
+      # Probabilidade de acertar a sena (6 números), aposta simples:
+      # 1 em 50.063.860  ->  ~0,00000001997
+    arvore:
+      tipo: chance
+      nome: "Ganha o prêmio principal?"
+      ramos:
+        - nome: "Ganha (sena)"
+          p: 0.00000001997
+          tipo: folha
+          formula: "premio - custo_bilhete"
+        - nome: "Não ganha"
+          p_resto: true
+          tipo: folha
+          formula: "-custo_bilhete"
+
+  - nome: "Não apostar (status quo)"
+    formula: "0"

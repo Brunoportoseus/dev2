@@ -91,6 +91,7 @@
     <button class="ghost sm" onclick="loadModel(EX_CARRO)">🚗 Trocar de carro</button>
     <button class="ghost sm" onclick="loadModel(EX_PRODUTO)">🚀 Lançar um produto</button>
     <button class="ghost sm" onclick="loadModel(EX_REFORMA)">🏠 Reformar a casa</button>
+    <button class="ghost sm" onclick="loadModel(EX_LOTERIA)">🎲 Apostar na loteria</button>
   </div>
 
   <div class="grid">
@@ -665,6 +666,18 @@ const EX_REFORMA={problema:"Fazer a reforma da casa agora ou não?",
      {nome:"Estoura o orçamento",p_var:"prob_estouro",tipo:"folha",formula:"valorizacao - custo_base - custo_extra"},
      {nome:"Fica no orçamento",p_resto:true,tipo:"folha",formula:"valorizacao - custo_base"}]}},
   {nome:"Não reformar (status quo)",formula:"0"}]};
+
+const EX_LOTERIA={problema:"Apostar na Mega-Sena (aposta simples) ou não?",
+ objetivo:"Ganho líquido de uma aposta",sentido:"max",horizonte:"1 sorteio",moeda:"R$",iteracoes:50000,seed:42,
+ limiar_bom_negocio:0,
+ parametros:{
+  premio:{dist:"pert",min:3000000,moda:45000000,max:350000000}},
+ alternativas:[
+  {nome:"Apostar (1 jogo)",constantes:{custo_bilhete:5},
+   arvore:{tipo:"chance",nome:"Ganha o prêmio principal? (chance ≈ 1 em 50 milhões)",ramos:[
+     {nome:"Ganha (sena)",p:0.00000001997,tipo:"folha",formula:"premio - custo_bilhete"},
+     {nome:"Não ganha",p_resto:true,tipo:"folha",formula:"-custo_bilhete"}]}},
+  {nome:"Não apostar (status quo)",formula:"0"}]};
 
 // estado inicial
 addParam('exemplo_incerteza','faixa',{min:0,moda:0,max:0});
