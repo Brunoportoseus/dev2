@@ -1,0 +1,90 @@
+# EXEMPLO — "Comprar carro novo" vs "Manter carro usado"
+# Modelo genérico: o motor (decisao.py) serve para QUALQUER decisão.
+# Objetivo: minimizar o CUSTO TOTAL ao longo de 30 meses.
+# Rode:  python3 .claude/tools/decisao/decisao.py .claude/tools/decisao/exemplos/carro.yaml
+
+problema: "Comprar um carro novo (R$ 100.000) ou manter o carro usado que exige manutenção?"
+objetivo: "Custo total em 30 meses"
+sentido: min            # queremos o MENOR custo
+moeda: "R$"
+horizonte_meses: 30
+iteracoes: 50000
+seed: 42
+
+# "Bom negócio" = custo total em 30 meses ficar até R$ 20.000.
+limiar_bom_negocio: 20000
+
+# ---- Incertezas (vêm de dados de mercado / probabilidades) ----
+parametros:
+  desval_30m:            # desvalorização acumulada do carro novo em 30 meses
+    dist: pert
+    min: 0.30
+    moda: 0.42
+    max: 0.55
+  venda_usado_agora:     # quanto você recebe vendendo o usado hoje
+    dist: pert
+    min: 22000
+    moda: 28000
+    max: 33000
+  manut_novo_total:      # manutenção do carro novo em 30 meses (em garantia)
+    dist: normal
+    media: 4000
+    desvio: 1500
+  custo_componentes:     # troca de componentes exigida no usado, agora
+    dist: pert
+    min: 6000
+    moda: 9000
+    max: 14000
+  manut_ano_usado:       # manutenção anual do carro usado
+    dist: normal
+    media: 9000
+    desvio: 3000
+  prob_pane:             # probabilidade (incerta) de pane grave no usado em 30m
+    dist: pert
+    min: 0.20
+    moda: 0.30
+    max: 0.45
+  custo_pane_grave:      # custo da pane grave, se ocorrer
+    dist: pert
+    min: 12000
+    moda: 18000
+    max: 30000
+  residual_usado_30m:    # valor de revenda do usado após mais 30 meses
+    dist: pert
+    min: 12000
+    moda: 16000
+    max: 20000
+
+alternativas:
+
+  - nome: "Comprar carro novo"
+    constantes:
+      preco_novo: 100000
+    # custo = compra - venda do usado - revenda do novo em 30m + manutenção
+    formula: >-
+      preco_novo
+      - venda_usado_agora
+      - preco_novo * (1 - desval_30m)
+      + manut_novo_total
+
+  - nome: "Manter carro usado"
+    constantes:
+      anos: 2.5
+    # Árvore de decisão: nó de chance "ocorre pane grave?"
+    arvore:
+      tipo: chance
+      nome: "Pane grave no carro usado em 30 meses?"
+      ramos:
+        - p_var: prob_pane          # ramo: ocorre pane
+          tipo: folha
+          formula: >-
+            custo_componentes
+            + manut_ano_usado * anos
+            + custo_pane_grave
+            - residual_usado_30m
+        - p_resto: true             # ramo: não ocorre pane
+          tipo: folha
+          formula: >-
+            custo_componentes
+            + manut_ano_usado * anos
+            - residual_usado_30m

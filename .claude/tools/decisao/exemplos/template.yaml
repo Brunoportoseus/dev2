@@ -1,0 +1,60 @@
+# TEMPLATE EM BRANCO — copie e adapte para QUALQUER decisão.
+# (trocar de emprego, investir, mudar de cidade, fazer um curso, contratar,
+#  cancelar um serviço, fazer uma cirurgia eletiva, lançar um side project…)
+#
+# Rode:  python3 .claude/tools/decisao/decisao.py SEU_ARQUIVO.yaml
+# Esquema completo: .claude/knowledge/decisao/formato-entrada.md
+
+problema: "Descreva em uma frase a decisão a tomar."
+objetivo: "O que o número representa (ex.: ganho líquido em 24 meses)."
+sentido: max            # 'max' p/ maximizar ganho/utilidade | 'min' p/ minimizar custo
+moeda: "R$"
+iteracoes: 50000
+seed: 42
+
+# Opcional: limiar de 'bom resultado' para reportar P(bom).
+# Com sentido:max -> bom = payoff >= limiar | com sentido:min -> bom = payoff <= limiar
+# limiar_bom_negocio: 0
+
+# ---- Incertezas: tudo que você NÃO sabe com certeza vira distribuição ----
+# Tipos: const | uniforme(min,max) | triangular(min,moda,max) |
+#        pert(min,moda,max) | normal(media,desvio) |
+#        lognormal(media_log,desvio_log) | bernoulli(p) |
+#        discreta(valores,probs) | beta(alpha,beta)
+parametros:
+  exemplo_incerteza_a:
+    dist: pert
+    min: 0
+    moda: 0
+    max: 0
+  exemplo_incerteza_b:
+    dist: normal
+    media: 0
+    desvio: 0
+
+# ---- Alternativas: cada decisão possível e a conta do seu resultado ----
+alternativas:
+
+  - nome: "Alternativa A"
+    constantes:
+      const_1: 0
+    # 'formula': expressão aritmética com constantes e parâmetros amostrados.
+    # Operadores: + - * / ** %  | funções: min max abs round exp log sqrt
+    # Condicional: (a if cond else b)
+    formula: "const_1 + exemplo_incerteza_a - exemplo_incerteza_b"
+
+  - nome: "Alternativa B"
+    constantes:
+      const_2: 0
+    # Em vez de 'formula', use 'arvore' quando houver eventos condicionais
+    # com probabilidade (nós de chance). Veja exemplos/carro.yaml.
+    arvore:
+      tipo: chance
+      nome: "Evento incerto?"
+      ramos:
+        - p: 0.3                 # ou 'p_var: nome_param' (prob. vinda de parâmetro)
+          tipo: folha
+          formula: "const_2 - 1000"
+        - p_resto: true          # absorve a probabilidade restante (1 - soma)
+          tipo: folha
+          formula: "const_2"
