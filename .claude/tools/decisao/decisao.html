@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análise de Decisão — Squad PLANOA</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#F6F7FA;--surface:#FFF;--surface2:#F0F2F7;--border:rgba(0,0,0,.09);
+    --border2:rgba(0,0,0,.14);--text:#131722;--text2:#5A6178;--text3:#9099B3;
+    --accent:#5C5FEF;--accent-bg:#EEEEFF;--good:#1F9D55;--warn:#C97A0E;--bad:#D14343;
+    --mono:'DM Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.5;padding:24px;font-size:14px}
+  .wrap{max-width:1180px;margin:0 auto}
+  h1{font-size:22px;font-weight:700;margin-bottom:2px}
+  .sub{color:var(--text2);font-size:13px;margin-bottom:20px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:18px}
+  .card h2{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .card h2 .tag{background:var(--accent-bg);color:var(--accent);font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px}
+  label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin:10px 0 4px}
+  input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--border2);border-radius:8px;
+    font-family:inherit;font-size:13px;background:var(--surface);color:var(--text)}
+  textarea{font-family:var(--mono);font-size:12px;min-height:240px;resize:vertical}
+  .row{display:flex;gap:8px}.row>*{flex:1}
+  .mini{font-size:11px;color:var(--text3);margin-top:3px}
+  button{font-family:inherit;font-weight:600;font-size:13px;border:0;border-radius:8px;
+    padding:9px 16px;cursor:pointer;background:var(--accent);color:#fff}
+  button.ghost{background:var(--surface2);color:var(--text)}
+  button.sm{padding:5px 10px;font-size:12px}
+  .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th,td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--border)}
+  th{color:var(--text3);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+  td input,td select{padding:5px 6px;font-size:12px}
+  .x{background:transparent;color:var(--bad);padding:4px 8px}
+  .alt{padding:12px;border:1px solid var(--border);border-radius:10px;margin-bottom:10px;background:var(--surface2)}
+  .res-alt{padding:14px;border:1px solid var(--border);border-radius:12px;margin-bottom:12px}
+  .res-alt.win{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
+  .res-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .res-name{font-weight:700;font-size:15px}
+  .pct{font-size:24px;font-weight:700;color:var(--accent);font-family:var(--mono)}
+  .bar{height:9px;background:var(--surface2);border-radius:999px;overflow:hidden;margin:8px 0}
+  .bar>i{display:block;height:100%;background:var(--accent);border-radius:999px}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;font-size:12px;color:var(--text2);margin-top:8px}
+  .stats b{color:var(--text);font-family:var(--mono);font-weight:500}
+  .banner{padding:14px 16px;border-radius:12px;background:var(--accent);color:#fff;font-weight:600;margin-bottom:14px}
+  .torn{font-size:12px}
+  .torn .b{display:flex;align-items:center;gap:8px;margin:5px 0}
+  .torn .b .n{width:170px;color:var(--text2)}
+  .torn .b .t{flex:1;height:10px;background:var(--surface2);border-radius:4px;overflow:hidden}
+  .torn .b .t>i{display:block;height:100%;background:var(--text3)}
+  .flip{color:var(--bad);font-weight:700;font-size:11px}
+  .err{background:#FDECEC;color:var(--bad);border:1px solid #F5C2C2;padding:10px 12px;border-radius:8px;font-size:12px;margin-top:10px;white-space:pre-wrap;font-family:var(--mono)}
+  .ok{color:var(--good);font-size:12px;margin-top:6px}
+  details{margin-top:12px}summary{cursor:pointer;font-size:12px;font-weight:600;color:var(--text2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Análise de Decisão</h1>
+  <div class="sub">Squad de Decisão / Pesquisa Operacional — árvore de decisão + simulação de Monte Carlo, no navegador. Genérico para qualquer decisão.</div>
+
+  <div class="grid">
+    <div>
+      <div class="card">
+        <h2>1. O problema <span class="tag">obrigatório</span></h2>
+        <label>Decisão (em uma frase)</label>
+        <input id="f_prob" placeholder="Comprar um carro novo ou manter o usado?">
+        <label>Objetivo (o que o número representa)</label>
+        <input id="f_obj" placeholder="Custo total em 30 meses">
+        <div class="row">
+          <div><label>Sentido</label>
+            <select id="f_sent"><option value="min">minimizar (custo)</option><option value="max">maximizar (ganho)</option></select></div>
+          <div><label>Moeda</label><input id="f_moeda" value="R$"></div>
+        </div>
+        <div class="row">
+          <div><label>Iterações</label><input id="f_iter" type="number" value="50000"></div>
+          <div><label>Seed</label><input id="f_seed" type="number" value="42"></div>
+          <div><label>Limiar "bom" (opc.)</label><input id="f_lim" type="number" placeholder="vazio = ignorar"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>2. Incertezas (distribuições)</h2>
+        <div class="mini">Tudo que você não sabe ao certo. Tipos: const, uniforme, triangular, pert, normal, lognormal, bernoulli.</div>
+        <table id="t_par"><thead><tr><th>Nome</th><th>Tipo</th><th>Parâmetros</th><th></th></tr></thead><tbody></tbody></table>
+        <div class="btns"><button class="ghost sm" onclick="addParam()">+ incerteza</button></div>
+      </div>
+
+      <div class="card">
+        <h2>3. Alternativas</h2>
+        <div class="mini">Cada opção (inclua sempre "não fazer nada"). Constantes: <code>nome=valor; nome=valor</code>. Fórmula usa constantes e incertezas: <code>+ - * / ** %</code>, funções <code>min max abs exp log sqrt</code>.</div>
+        <div id="alts"></div>
+        <div class="btns"><button class="ghost sm" onclick="addAlt()">+ alternativa</button></div>
+      </div>
+
+      <div class="btns">
+        <button onclick="run()">▶ Rodar análise</button>
+        <button class="ghost" onclick="loadCarro()">Carregar exemplo (carro)</button>
+        <button class="ghost" onclick="syncToJson()">Gerar JSON ↓</button>
+      </div>
+      <div id="err"></div>
+
+      <details>
+        <summary>JSON do modelo (avançado — suporta árvore de decisão)</summary>
+        <textarea id="json" spellcheck="false"></textarea>
+        <div class="btns"><button class="ghost sm" onclick="runJson()">Rodar este JSON</button>
+        <button class="ghost sm" onclick="copyJson()">Copiar</button></div>
+        <div class="mini">Para nós de chance/árvore use este JSON (esquema em <code>.claude/knowledge/decisao/formato-entrada.md</code>).</div>
+      </details>
+    </div>
+
+    <div>
+      <div class="card" id="resCard" style="display:none">
+        <h2>Resultado <span class="tag" id="resIter"></span></h2>
+        <div id="banner"></div>
+        <div id="resAlts"></div>
+        <h2 style="margin-top:18px">Sensibilidade — o que vira a decisão</h2>
+        <div id="torn" class="torn"></div>
+      </div>
+      <div class="card" id="hint">
+        <h2>Como funciona</h2>
+        <p style="font-size:13px;color:var(--text2)">
+          Preencha o problema, as incertezas (cada coisa que você "acha" mas não
+          sabe vira uma faixa mín/moda/máx) e as alternativas. Clique
+          <b>Rodar análise</b>. O motor simula milhares de cenários e devolve a
+          <b>probabilidade de cada decisão ser a melhor</b>, o intervalo de
+          resultados e quais incertezas podem virar a decisão.</p>
+        <p style="font-size:13px;color:var(--text2);margin-top:8px">
+          Comece por <b>Carregar exemplo (carro)</b> para ver tudo preenchido.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===ENGINE START=== (espelha .claude/tools/decisao/decisao.py)
+function makeRng(seed){let s=(seed>>>0)||1;return function(){s|=0;s=s+0x6D2B79F5|0;
+  let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function rNorm(rng,mu,sd){let u=0,v=0;while(u===0)u=rng();while(v===0)v=rng();
+  return mu+sd*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function rGamma(rng,k){ // Marsaglia-Tsang
+  if(k<1){const u=rng();return rGamma(rng,1+k)*Math.pow(u,1/k);}
+  const d=k-1/3,c=1/Math.sqrt(9*d);
+  while(true){let x,v;do{x=rNorm(rng,0,1);v=1+c*x;}while(v<=0);
+    v=v*v*v;const u=rng();
+    if(u<1-0.0331*x*x*x*x)return d*v;
+    if(Math.log(u)<0.5*x*x+d*(1-v+Math.log(v)))return d*v;}}
+function rBeta(rng,a,b){const x=rGamma(rng,a),y=rGamma(rng,b);return x/(x+y);}
+function pert(rng,lo,mo,hi,lamb){lamb=lamb||4;if(hi<=lo)return lo;
+  const a=1+lamb*(mo-lo)/(hi-lo),b=1+lamb*(hi-mo)/(hi-lo);
+  return lo+rBeta(rng,a,b)*(hi-lo);}
+function rTriang(rng,lo,mo,hi){const u=rng(),c=(mo-lo)/(hi-lo);
+  return u<c?lo+Math.sqrt(u*(hi-lo)*(mo-lo)):hi-Math.sqrt((1-u)*(hi-lo)*(hi-mo));}
+function sample(rng,spec){
+  if(typeof spec==='number')return spec;
+  if(!spec||!spec.dist)throw new Error('distribuição inválida');
+  const d=String(spec.dist).toLowerCase();
+  if(d==='const'||d==='constante')return +spec.valor;
+  if(d==='uniforme'||d==='uniform')return +spec.min+rng()*(+spec.max-+spec.min);
+  if(d==='triangular'||d==='triang')return rTriang(rng,+spec.min,+spec.moda,+spec.max);
+  if(d==='pert')return pert(rng,+spec.min,+spec.moda,+spec.max,+spec.lambda||4);
+  if(d==='normal'||d==='gauss')return rNorm(rng,+spec.media,+spec.desvio);
+  if(d==='lognormal'||d==='lognorm')return Math.exp(rNorm(rng,+spec.media_log,+spec.desvio_log));
+  if(d==='bernoulli'||d==='binaria')return rng()<+spec.p?1:0;
+  if(d==='discreta'||d==='discrete'){const v=spec.valores,p=spec.probs,
+    tot=p.reduce((a,x)=>a+x,0);let r=rng()*tot;for(let i=0;i<v.length;i++){r-=p[i];if(r<=0)return +v[i];}return +v[v.length-1];}
+  if(d==='beta')return rBeta(rng,+spec.alpha,+spec.beta);
+  throw new Error('distribuição desconhecida: '+d);}
+function meanOf(spec){
+  if(typeof spec==='number')return spec;
+  const d=String(spec.dist).toLowerCase();
+  if(d==='const'||d==='constante')return +spec.valor;
+  if(d==='uniforme'||d==='uniform')return (+spec.min+ +spec.max)/2;
+  if(d==='triangular'||d==='triang')return (+spec.min+ +spec.moda+ +spec.max)/3;
+  if(d==='pert')return (+spec.min+4*+spec.moda+ +spec.max)/6;
+  if(d==='normal'||d==='gauss')return +spec.media;
+  if(d==='lognormal'||d==='lognorm')return Math.exp(+spec.media_log+Math.pow(+spec.desvio_log,2)/2);
+  if(d==='bernoulli'||d==='binaria')return +spec.p;
+  if(d==='discreta'||d==='discrete'){const v=spec.valores,p=spec.probs,
+    tot=p.reduce((a,x)=>a+x,0);return v.reduce((a,x,i)=>a+x*p[i],0)/tot;}
+  if(d==='beta')return +spec.alpha/(+spec.alpha+ +spec.beta);
+  throw new Error('distribuição desconhecida: '+d);}
+
+// Avaliador de expressão seguro: tokeniza e parseia (sem eval)
+const FUNCS={min:Math.min,max:Math.max,abs:Math.abs,round:Math.round,
+  exp:Math.exp,log:Math.log,sqrt:Math.sqrt,floor:Math.floor,ceil:Math.ceil};
+function tokenize(s){const t=[];const re=/\s*([A-Za-z_]\w*|\d+\.?\d*|\*\*|<=|>=|==|!=|[-+*/%(),<>])/g;let m,last=0;
+  while((m=re.exec(s))){if(m.index!==last&&s.slice(last,m.index).trim()!=='')throw new Error('token inválido perto de "'+s.slice(last)+'"');t.push(m[1]);last=re.lastIndex;}
+  if(s.slice(last).trim()!=='')throw new Error('token inválido: "'+s.slice(last)+'"');return t;}
+function safeEval(expr,vars){
+  const tk=tokenize(String(expr));let i=0;
+  const peek=()=>tk[i],next=()=>tk[i++];
+  function parseExpr(){ // ternário estilo Python: A if C else B
+    let a=parseCmp();
+    if(peek()==='if'){next();const c=parseCmp();
+      if(next()!=='else')throw new Error('esperado "else"');const b=parseExpr();
+      return c?a:b;}
+    return a;}
+  function parseCmp(){let a=parseAdd();
+    while(['<','<=','>','>=','==','!='].includes(peek())){const op=next(),b=parseAdd();
+      a=op==='<'?a<b:op==='<='?a<=b:op==='>'?a>b:op==='>='?a>=b:op==='=='?a===b:a!==b;}
+    return a;}
+  function parseAdd(){let a=parseMul();
+    while(peek()==='+'||peek()==='-'){const op=next(),b=parseMul();a=op==='+'?a+b:a-b;}return a;}
+  function parseMul(){let a=parseUnary();
+    while(peek()==='*'||peek()==='/'||peek()==='%'){const op=next(),b=parseUnary();
+      a=op==='*'?a*b:op==='/'?a/b:a%b;}return a;}
+  function parseUnary(){if(peek()==='-'){next();return -parseUnary();}
+    if(peek()==='+'){next();return parseUnary();}return parsePow();}
+  function parsePow(){let a=parseAtom();if(peek()==='**'){next();return Math.pow(a,parseUnary());}return a;}
+  function parseAtom(){const t=next();
+    if(t===undefined)throw new Error('expressão incompleta');
+    if(t==='('){const v=parseExpr();if(next()!==')')throw new Error('faltou ")"');return v;}
+    if(/^\d/.test(t))return parseFloat(t);
+    if(/^[A-Za-z_]/.test(t)){
+      if(peek()==='('){next();const args=[];
+        if(peek()!==')'){args.push(parseExpr());while(peek()===','){next();args.push(parseExpr());}}
+        if(next()!==')')throw new Error('faltou ")" em '+t);
+        if(!FUNCS[t])throw new Error('função não permitida: '+t);return FUNCS[t](...args);}
+      if(!(t in vars))throw new Error("variável não definida: '"+t+"'");return vars[t];}
+    throw new Error('token inesperado: '+t);}
+  const r=parseExpr();if(i<tk.length)throw new Error('sobrou: '+tk.slice(i).join(' '));return r;}
+
+function evalTree(node,env){
+  const tipo=node.tipo||'folha';
+  if(tipo==='folha'||tipo==='leaf')
+    return ('valor'in node)?+node.valor:safeEval(node.formula,env);
+  if(tipo==='chance'||tipo==='acaso'){
+    const ramos=node.ramos,probs=[];
+    for(const r of ramos){
+      if(r.p_resto)probs.push(null);
+      else if('p'in r)probs.push(+r.p);
+      else if('p_var'in r)probs.push(+env[r.p_var]);
+      else throw new Error("ramo precisa de 'p','p_var' ou 'p_resto'");}
+    const fixos=probs.filter(p=>p!=null).reduce((a,x)=>a+x,0);
+    const nr=probs.filter(p=>p==null).length;
+    if(nr){const resto=Math.max(0,1-fixos);for(let k=0;k<probs.length;k++)if(probs[k]==null)probs[k]=resto/nr;}
+    const soma=probs.reduce((a,x)=>a+x,0);
+    if(Math.abs(soma-1)>1e-6)throw new Error('probabilidades somam '+soma.toFixed(4)+', não 1');
+    return ramos.reduce((acc,r,k)=>acc+probs[k]*evalTree(r,env),0);}
+  if(tipo==='decisao'||tipo==='decision'){
+    const vs=node.ramos.map(r=>evalTree(r,env));
+    return env._max?Math.max(...vs):Math.min(...vs);}
+  throw new Error('tipo de nó desconhecido: '+tipo);}
+
+function payoff(alt,env,sentidoMax){
+  const base=Object.assign({},env);base._max=sentidoMax?1:0;
+  for(const k in (alt.constantes||{}))base[k]=+alt.constantes[k];
+  if('arvore'in alt){let n=alt.arvore;if(Array.isArray(n))n={tipo:'chance',ramos:n};return evalTree(n,base);}
+  if('formula'in alt)return safeEval(alt.formula,base);
+  throw new Error("alternativa '"+alt.nome+"' precisa de 'formula' ou 'arvore'");}
+
+function percentil(arr,q){const s=[...arr].sort((a,b)=>a-b);if(!s.length)return NaN;
+  const idx=q*(s.length-1),lo=Math.floor(idx),hi=Math.ceil(idx);
+  return lo===hi?s[idx|0]:s[lo]+(s[hi]-s[lo])*(idx-lo);}
+
+function analisar(m){
+  const sentidoMax=['max','maximizar','maximize'].includes(String(m.sentido||'max').toLowerCase());
+  const params=m.parametros||{},alts=m.alternativas,nIter=+m.iteracoes||50000;
+  const limiar=(m.limiar_bom_negocio===undefined||m.limiar_bom_negocio===null||m.limiar_bom_negocio==='')?null:+m.limiar_bom_negocio;
+  const envC={};for(const k in params)envC[k]=meanOf(params[k]);
+  const emv={};for(const a of alts)emv[a.nome]=payoff(a,envC,sentidoMax);
+  const rng=makeRng(+m.seed||42);
+  const dist={},vence={};for(const a of alts){dist[a.nome]=[];vence[a.nome]=0;}
+  for(let it=0;it<nIter;it++){
+    const env={};for(const k in params)env[k]=sample(rng,params[k]);
+    let best=null,bv=null;
+    for(const a of alts){const v=payoff(a,env,sentidoMax);dist[a.nome].push(v);
+      if(bv===null||(sentidoMax?v>bv:v<bv)){bv=v;best=a.nome;}}
+    vence[best]++;}
+  const out={sentido:sentidoMax?'maximizar':'minimizar',iteracoes:nIter,
+    moeda:m.moeda||'',alternativas:[]};
+  for(const a of alts){const d=dist[a.nome],n=d.length;
+    const media=d.reduce((x,y)=>x+y,0)/n;
+    const vr=d.reduce((x,y)=>x+(y-media)*(y-media),0)/n;
+    const rec={nome:a.nome,emv:emv[a.nome],media,desvio:Math.sqrt(vr),
+      p5:percentil(d,.05),p50:percentil(d,.5),p95:percentil(d,.95),
+      prob_melhor:vence[a.nome]/nIter};
+    if(limiar!==null){const bons=d.filter(x=>sentidoMax?x>=limiar:x<=limiar).length;
+      rec.prob_bom=bons/n;rec.limiar=limiar;}
+    out.alternativas.push(rec);}
+  const ord=[...alts].sort((x,y)=>sentidoMax?emv[y.nome]-emv[x.nome]:emv[x.nome]-emv[y.nome]);
+  const rec=ord[0],con=ord[1]||ord[0];
+  out.recomendacao=( sentidoMax?
+    out.alternativas.reduce((a,b)=>b.media>a.media?b:a):
+    out.alternativas.reduce((a,b)=>b.media<a.media?b:a) ).nome;
+  const vant=env=>{const pr=payoff(rec,env,sentidoMax),pc=payoff(con,env,sentidoMax);
+    return sentidoMax?pr-pc:pc-pr;};
+  const rng2=makeRng((+m.seed||42)+1),torn=[];
+  for(const pn in params){
+    const am=[];for(let k=0;k<2000;k++)am.push(sample(rng2,params[pn]));am.sort((a,b)=>a-b);
+    const lo=am[(0.10*am.length)|0],hi=am[(0.90*am.length)|0];
+    const eL=Object.assign({},envC);eL[pn]=lo;const eH=Object.assign({},envC);eH[pn]=hi;
+    const aL=vant(eL),aH=vant(eH);
+    torn.push({parametro:pn,swing:Math.abs(aH-aL),pode_virar:(aL<0||aH<0)});}
+  torn.sort((a,b)=>b.swing-a.swing);
+  out.sensibilidade=torn;
+  out.comparacao={recomendada:rec.nome,concorrente:con.nome,vantagem_central:vant(envC)};
+  return out;}
+// ===ENGINE END===
+
+// ---------- UI ----------
+function fmtMoney(v,c){const s=(Math.round(v*100)/100).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});return (c?c+' ':'')+s;}
+function el(h){const d=document.createElement('div');d.innerHTML=h.trim();return d.firstChild;}
+
+const DIST_FIELDS={const:['valor'],uniforme:['min','max'],triangular:['min','moda','max'],
+  pert:['min','moda','max'],normal:['media','desvio'],lognormal:['media_log','desvio_log'],
+  bernoulli:['p']};
+
+function paramRow(name,dist,vals){
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><input value="${name||''}" placeholder="nome"></td>
+    <td><select>${Object.keys(DIST_FIELDS).map(d=>`<option ${d===dist?'selected':''}>${d}</option>`).join('')}</select></td>
+    <td class="pf"></td><td><button class="x sm" title="remover">✕</button></td>`;
+  const sel=tr.querySelector('select'),pf=tr.querySelector('.pf');
+  function render(){const f=DIST_FIELDS[sel.value];pf.innerHTML='';
+    f.forEach(k=>{const i=document.createElement('input');i.placeholder=k;i.dataset.k=k;i.style.width='80px';i.style.display='inline-block';i.style.marginRight='4px';
+      if(vals&&vals[k]!=null)i.value=vals[k];pf.appendChild(i);});}
+  sel.onchange=render;render();
+  tr.querySelector('.x').onclick=()=>tr.remove();
+  return tr;}
+function addParam(n,d,v){document.querySelector('#t_par tbody').appendChild(paramRow(n,d,v));}
+
+function altBox(a){
+  a=a||{};
+  const b=el(`<div class="alt">
+    <div class="row"><div><label>Nome da alternativa</label><input class="an" value="${a.nome||''}" placeholder="Comprar carro novo"></div>
+    <div style="flex:0 0 90px;display:flex;align-items:flex-end"><button class="x sm">remover</button></div></div>
+    <label>Constantes (nome=valor; nome=valor)</label>
+    <input class="ac" value="${a.constantes?Object.entries(a.constantes).map(([k,v])=>k+'='+v).join('; '):''}" placeholder="preco=100000">
+    <label>Fórmula do resultado</label>
+    <input class="af" value="${a.formula?a.formula.replace(/"/g,'&quot;'):''}" placeholder="preco - valor_revenda + manut">
+  </div>`);
+  b.querySelector('.x').onclick=()=>b.remove();
+  return b;}
+function addAlt(a){document.getElementById('alts').appendChild(altBox(a));}
+
+function readForm(){
+  const params={};
+  document.querySelectorAll('#t_par tbody tr').forEach(tr=>{
+    const n=tr.querySelector('input').value.trim();if(!n)return;
+    const d=tr.querySelector('select').value,o={dist:d};
+    tr.querySelectorAll('.pf input').forEach(i=>o[i.dataset.k]=parseFloat(i.value));
+    params[n]=o;});
+  const alts=[];
+  document.querySelectorAll('#alts .alt').forEach(b=>{
+    const nome=b.querySelector('.an').value.trim();if(!nome)return;
+    const cs={};b.querySelector('.ac').value.split(';').forEach(p=>{
+      const [k,v]=p.split('=');if(k&&k.trim())cs[k.trim()]=parseFloat(v);});
+    alts.push({nome,constantes:cs,formula:b.querySelector('.af').value.trim()});});
+  const lim=document.getElementById('f_lim').value;
+  return{problema:document.getElementById('f_prob').value,
+    objetivo:document.getElementById('f_obj').value,
+    sentido:document.getElementById('f_sent').value,
+    moeda:document.getElementById('f_moeda').value,
+    iteracoes:+document.getElementById('f_iter').value,
+    seed:+document.getElementById('f_seed').value,
+    limiar_bom_negocio:lim===''?null:+lim,
+    parametros:params,alternativas:alts};}
+
+function showError(e){document.getElementById('err').innerHTML='<div class="err">⚠ '+e+'</div>';}
+function clearError(){document.getElementById('err').innerHTML='';}
+
+function render(m,r){
+  clearError();
+  document.getElementById('hint').style.display='none';
+  const C=document.getElementById('resCard');C.style.display='block';
+  document.getElementById('resIter').textContent=r.iteracoes.toLocaleString('pt-BR')+' simulações';
+  const best=r.alternativas.reduce((a,b)=>b.prob_melhor>a.prob_melhor?b:a);
+  document.getElementById('banner').innerHTML=
+    `<div class="banner">Recomendação: <b>${r.recomendacao}</b> — maior chance de ser a melhor decisão (${(best.prob_melhor*100).toFixed(1)}%).</div>`;
+  const RA=document.getElementById('resAlts');RA.innerHTML='';
+  r.alternativas.slice().sort((a,b)=>b.prob_melhor-a.prob_melhor).forEach(a=>{
+    RA.appendChild(el(`<div class="res-alt ${a.nome===r.recomendacao?'win':''}">
+      <div class="res-head"><span class="res-name">${a.nome}</span>
+        <span class="pct">${(a.prob_melhor*100).toFixed(1)}%</span></div>
+      <div style="font-size:11px;color:var(--text3)">probabilidade de ser a MELHOR decisão</div>
+      <div class="bar"><i style="width:${(a.prob_melhor*100).toFixed(1)}%"></i></div>
+      <div class="stats">
+        <span>Valor esperado: <b>${fmtMoney(a.emv,r.moeda)}</b></span>
+        <span>Média: <b>${fmtMoney(a.media,r.moeda)}</b></span>
+        <span>p5–p95: <b>${fmtMoney(a.p5,r.moeda)} … ${fmtMoney(a.p95,r.moeda)}</b></span>
+        ${a.prob_bom!=null?`<span>P(bom | ${fmtMoney(a.limiar,r.moeda)}): <b>${(a.prob_bom*100).toFixed(1)}%</b></span>`:''}
+      </div></div>`));});
+  const T=document.getElementById('torn');
+  const mx=Math.max(...r.sensibilidade.map(t=>t.swing),1e-9);
+  T.innerHTML=`<div style="font-size:12px;color:var(--text2);margin-bottom:8px">Vantagem de <b>${r.comparacao.recomendada}</b> sobre <b>${r.comparacao.concorrente}</b>: ${fmtMoney(r.comparacao.vantagem_central,r.moeda)} (cenário central).</div>`+
+    r.sensibilidade.slice(0,8).map(t=>`<div class="b"><span class="n">${t.parametro}</span>
+      <span class="t"><i style="width:${(100*t.swing/mx).toFixed(0)}%"></i></span>
+      <span>${fmtMoney(t.swing,r.moeda)}</span>${t.pode_virar?'<span class="flip">PODE VIRAR</span>':''}</div>`).join('');
+}
+
+function run(){try{const m=readForm();
+  if(!m.alternativas.length)throw new Error('adicione ao menos uma alternativa');
+  syncToJson();render(m,analisar(m));}catch(e){showError(e.message||String(e));}}
+function runJson(){try{const m=JSON.parse(document.getElementById('json').value);
+  render(m,analisar(m));}catch(e){showError(e.message||String(e));}}
+function syncToJson(){try{document.getElementById('json').value=JSON.stringify(readForm(),null,2);}catch(e){}}
+function copyJson(){navigator.clipboard&&navigator.clipboard.writeText(document.getElementById('json').value);}
+
+const CARRO={problema:"Comprar um carro novo (R$ 100.000) ou manter o carro usado?",
+ objetivo:"Custo total em 30 meses",sentido:"min",moeda:"R$",iteracoes:50000,seed:42,
+ limiar_bom_negocio:20000,
+ parametros:{
+  desval_30m:{dist:"pert",min:.30,moda:.42,max:.55},
+  venda_usado_agora:{dist:"pert",min:22000,moda:28000,max:33000},
+  manut_novo_total:{dist:"normal",media:4000,desvio:1500},
+  custo_componentes:{dist:"pert",min:6000,moda:9000,max:14000},
+  manut_ano_usado:{dist:"normal",media:9000,desvio:3000},
+  prob_pane:{dist:"pert",min:.20,moda:.30,max:.45},
+  custo_pane_grave:{dist:"pert",min:12000,moda:18000,max:30000},
+  residual_usado_30m:{dist:"pert",min:12000,moda:16000,max:20000}},
+ alternativas:[
+  {nome:"Comprar carro novo",constantes:{preco_novo:100000},
+   formula:"preco_novo - venda_usado_agora - preco_novo*(1-desval_30m) + manut_novo_total"},
+  {nome:"Manter carro usado",constantes:{anos:2.5},
+   arvore:{tipo:"chance",ramos:[
+     {p_var:"prob_pane",tipo:"folha",formula:"custo_componentes + manut_ano_usado*anos + custo_pane_grave - residual_usado_30m"},
+     {p_resto:true,tipo:"folha",formula:"custo_componentes + manut_ano_usado*anos - residual_usado_30m"}]}}]};
+function loadCarro(){
+  document.getElementById('f_prob').value=CARRO.problema;
+  document.getElementById('f_obj').value=CARRO.objetivo;
+  document.getElementById('f_sent').value=CARRO.sentido;
+  document.getElementById('f_moeda').value=CARRO.moeda;
+  document.getElementById('f_iter').value=CARRO.iteracoes;
+  document.getElementById('f_seed').value=CARRO.seed;
+  document.getElementById('f_lim').value=CARRO.limiar_bom_negocio;
+  const tb=document.querySelector('#t_par tbody');tb.innerHTML='';
+  for(const k in CARRO.parametros){const s=CARRO.parametros[k];addParam(k,s.dist,s);}
+  document.getElementById('alts').innerHTML='';
+  CARRO.alternativas.forEach(a=>addAlt(a.formula?a:{nome:a.nome}));
+  document.getElementById('json').value=JSON.stringify(CARRO,null,2);
+  render(CARRO,analisar(CARRO));
+}
+// estado inicial
+addParam('exemplo',' pert'.trim(),{min:0,moda:0,max:0});
+addAlt({nome:'Alternativa A',formula:'0'});
+addAlt({nome:'Alternativa B (status quo)',formula:'0'});
+</script>
+</body>
+</html>
