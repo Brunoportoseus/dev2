@@ -1,0 +1,52 @@
+# EXEMPLO — Fazer a reforma da casa agora ou não?
+# Nó de chance: o orçamento pode estourar (probabilidade incerta).
+# Rode: python3 .claude/tools/decisao/decisao.py .claude/tools/decisao/exemplos/reforma.yaml
+
+problema: "Fazer a reforma da casa agora ou não?"
+objetivo: "Ganho líquido: valorização menos custo"
+sentido: max
+moeda: "R$"
+iteracoes: 50000
+seed: 42
+limiar_bom_negocio: 0      # "bom" = ganho líquido não-negativo
+
+parametros:
+  valorizacao:             # quanto o imóvel valoriza com a reforma
+    dist: pert
+    min: 40000
+    moda: 70000
+    max: 100000
+  custo_base:              # custo previsto da obra
+    dist: pert
+    min: 35000
+    moda: 50000
+    max: 65000
+  custo_extra:             # custo adicional se o orçamento estourar
+    dist: pert
+    min: 8000
+    moda: 15000
+    max: 30000
+  prob_estouro:            # probabilidade (incerta) de estourar o orçamento
+    dist: pert
+    min: 0.20
+    moda: 0.35
+    max: 0.55
+
+alternativas:
+
+  - nome: "Fazer a reforma"
+    arvore:
+      tipo: chance
+      nome: "O orçamento estoura?"
+      ramos:
+        - nome: "Estoura o orçamento"
+          p_var: prob_estouro
+          tipo: folha
+          formula: "valorizacao - custo_base - custo_extra"
+        - nome: "Fica no orçamento"
+          p_resto: true
+          tipo: folha
+          formula: "valorizacao - custo_base"
+
+  - nome: "Não reformar (status quo)"
+    formula: "0"

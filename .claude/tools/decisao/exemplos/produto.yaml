@@ -1,0 +1,44 @@
+# EXEMPLO — Lançar um novo produto/software ou não?
+# Árvore de decisão clássica: nó de decisão (lançar / não lançar) e nó de
+# chance (alta aceitação x baixa aceitação). O motor calcula o Valor Esperado.
+# Rode: python3 .claude/tools/decisao/decisao.py .claude/tools/decisao/exemplos/produto.yaml
+
+problema: "Lançar um novo software no mercado ou não?"
+objetivo: "Lucro em 12 meses"
+sentido: max
+moeda: "R$"
+horizonte_meses: 12
+iteracoes: 50000
+seed: 42
+limiar_bom_negocio: 0      # "bom" = não dar prejuízo
+
+parametros:
+  lucro_alta:              # lucro se a aceitação for alta
+    dist: pert
+    min: 500000
+    moda: 800000
+    max: 1100000
+  prejuizo_baixa:          # prejuízo se a aceitação for baixa
+    dist: pert
+    min: 150000
+    moda: 300000
+    max: 500000
+
+alternativas:
+
+  - nome: "Lançar o software"
+    arvore:
+      tipo: chance
+      nome: "Qual será a aceitação do público?"
+      ramos:
+        - nome: "Alta aceitação"
+          p: 0.60
+          tipo: folha
+          formula: "lucro_alta"
+        - nome: "Baixa aceitação"
+          p_resto: true          # completa os 40%
+          tipo: folha
+          formula: "-prejuizo_baixa"
+
+  - nome: "Não lançar (status quo)"
+    formula: "0"

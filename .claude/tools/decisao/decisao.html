@@ -16,29 +16,38 @@
     background:var(--bg);color:var(--text);line-height:1.5;padding:24px;font-size:14px}
   .wrap{max-width:1180px;margin:0 auto}
   h1{font-size:22px;font-weight:700;margin-bottom:2px}
-  .sub{color:var(--text2);font-size:13px;margin-bottom:20px}
+  .sub{color:var(--text2);font-size:13px;margin-bottom:18px}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
   @media(max-width:900px){.grid{grid-template-columns:1fr}}
   .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:18px}
-  .card h2{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .card h2{font-size:14px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
   .card h2 .tag{background:var(--accent-bg);color:var(--accent);font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px}
-  label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin:10px 0 4px}
+  .card .desc{font-size:12px;color:var(--text2);margin-bottom:12px}
+  label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin:10px 0 3px}
+  .help{font-size:11px;color:var(--text3);margin:2px 0 4px;font-style:italic}
   input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--border2);border-radius:8px;
     font-family:inherit;font-size:13px;background:var(--surface);color:var(--text)}
-  textarea{font-family:var(--mono);font-size:12px;min-height:240px;resize:vertical}
+  textarea{font-family:var(--mono);font-size:12px;min-height:220px;resize:vertical}
   .row{display:flex;gap:8px}.row>*{flex:1}
-  .mini{font-size:11px;color:var(--text3);margin-top:3px}
   button{font-family:inherit;font-weight:600;font-size:13px;border:0;border-radius:8px;
     padding:9px 16px;cursor:pointer;background:var(--accent);color:#fff}
   button.ghost{background:var(--surface2);color:var(--text)}
   button.sm{padding:5px 10px;font-size:12px}
   .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .x{background:transparent;color:var(--bad);padding:4px 8px;font-size:12px}
+  .pcard,.alt{padding:12px;border:1px solid var(--border);border-radius:10px;margin-bottom:10px;background:var(--surface2)}
+  .pcard .row,.alt .row{align-items:flex-end}
+  .modetabs{display:flex;gap:6px;margin:8px 0}
+  .modetabs button{flex:1;background:var(--surface);color:var(--text2);border:1px solid var(--border2)}
+  .modetabs button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .scn{display:grid;grid-template-columns:1.3fr .9fr auto 1.5fr auto;gap:6px;align-items:end;margin:6px 0}
+  .scn label{margin:0 0 2px}
+  .scn .chk{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2);padding-bottom:8px;white-space:nowrap}
+  .scn .chk input{width:auto}
+  .sumbadge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;display:inline-block;margin-top:6px}
+  .sum-ok{background:#E7F6EE;color:var(--good)}
+  .sum-bad{background:#FDECEC;color:var(--bad)}
   table{width:100%;border-collapse:collapse;font-size:12px}
-  th,td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--border)}
-  th{color:var(--text3);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
-  td input,td select{padding:5px 6px;font-size:12px}
-  .x{background:transparent;color:var(--bad);padding:4px 8px}
-  .alt{padding:12px;border:1px solid var(--border);border-radius:10px;margin-bottom:10px;background:var(--surface2)}
   .res-alt{padding:14px;border:1px solid var(--border);border-radius:12px;margin-bottom:12px}
   .res-alt.win{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
   .res-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
@@ -56,62 +65,117 @@
   .torn .b .t>i{display:block;height:100%;background:var(--text3)}
   .flip{color:var(--bad);font-weight:700;font-size:11px}
   .err{background:#FDECEC;color:var(--bad);border:1px solid #F5C2C2;padding:10px 12px;border-radius:8px;font-size:12px;margin-top:10px;white-space:pre-wrap;font-family:var(--mono)}
-  .ok{color:var(--good);font-size:12px;margin-top:6px}
   details{margin-top:12px}summary{cursor:pointer;font-size:12px;font-weight:600;color:var(--text2)}
+  .guia{background:var(--accent-bg);border:1px solid #d8d8fb;border-radius:10px;padding:12px 14px;font-size:12px;color:#33356b;margin-bottom:16px}
+  .guia b{color:#22245a}.guia ol{margin:6px 0 0 18px}.guia li{margin:3px 0}
+  code{font-family:var(--mono);background:var(--surface2);padding:1px 5px;border-radius:4px;font-size:11px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>Análise de Decisão</h1>
-  <div class="sub">Squad de Decisão / Pesquisa Operacional — árvore de decisão + simulação de Monte Carlo, no navegador. Genérico para qualquer decisão.</div>
+  <h1>Estatística &amp; Decisão</h1>
+  <div class="sub">Pesquisa Operacional + árvore de decisão + simulação de Monte Carlo, no navegador. Transforma qualquer problema ou decisão em probabilidades.</div>
+
+  <div class="guia">
+    <b>Como preencher (questionário em 4 passos):</b>
+    <ol>
+      <li><b>A decisão</b> — o que você precisa decidir e em quanto tempo.</li>
+      <li><b>O objetivo</b> — o que quer <i>maximizar</i> (lucro, ganho) ou <i>minimizar</i> (custo, perda).</li>
+      <li><b>As incertezas</b> — tudo que você não sabe ao certo. Estime <b>pior caso</b>, <b>mais provável</b> e <b>melhor caso</b>.</li>
+      <li><b>As alternativas</b> — cada opção (inclua sempre "não fazer nada") e o resultado de cada uma. Se houver eventos com chance (ex.: "o público aceita ou não?"), use o modo <b>Árvore de decisão</b>.</li>
+    </ol>
+  </div>
+
+  <div class="btns" style="margin-bottom:16px">
+    <span style="font-size:12px;font-weight:600;color:var(--text2);align-self:center">Exemplos prontos:</span>
+    <button class="ghost sm" onclick="loadModel(EX_CARRO)">🚗 Trocar de carro</button>
+    <button class="ghost sm" onclick="loadModel(EX_PRODUTO)">🚀 Lançar um produto</button>
+    <button class="ghost sm" onclick="loadModel(EX_REFORMA)">🏠 Reformar a casa</button>
+  </div>
 
   <div class="grid">
     <div>
       <div class="card">
-        <h2>1. O problema <span class="tag">obrigatório</span></h2>
-        <label>Decisão (em uma frase)</label>
-        <input id="f_prob" placeholder="Comprar um carro novo ou manter o usado?">
-        <label>Objetivo (o que o número representa)</label>
-        <input id="f_obj" placeholder="Custo total em 30 meses">
+        <h2>1. A decisão e o objetivo <span class="tag">obrigatório</span></h2>
+        <div class="desc">Descreva o problema e o que será otimizado. É o que dá sentido a todo o cálculo.</div>
+
+        <label>Qual é a decisão?</label>
+        <div class="help">Ex.: "Lançar um novo software no mercado ou não?" · "Trocar de carro?" · "Fazer a reforma agora?"</div>
+        <input id="f_prob" placeholder="Lançar um novo software no mercado ou não?">
+
+        <label>O que você quer otimizar? (objetivo)</label>
+        <div class="help">Ex.: "Lucro em 12 meses" · "Custo total em 30 meses" · "Ganho líquido do projeto"</div>
+        <input id="f_obj" placeholder="Lucro em 12 meses">
+
         <div class="row">
-          <div><label>Sentido</label>
-            <select id="f_sent"><option value="min">minimizar (custo)</option><option value="max">maximizar (ganho)</option></select></div>
-          <div><label>Moeda</label><input id="f_moeda" value="R$"></div>
+          <div>
+            <label>Sentido</label>
+            <div class="help">Maximizar ganho ou minimizar custo?</div>
+            <select id="f_sent">
+              <option value="max">Maximizar (lucro, ganho, valor)</option>
+              <option value="min">Minimizar (custo, perda, gasto)</option>
+            </select>
+          </div>
+          <div>
+            <label>Prazo / horizonte</label>
+            <div class="help">Apenas informativo (ex.: 12 meses).</div>
+            <input id="f_horiz" placeholder="12 meses">
+          </div>
+          <div>
+            <label>Moeda / unidade</label>
+            <div class="help">Rótulo dos resultados.</div>
+            <input id="f_moeda" value="R$">
+          </div>
         </div>
+
         <div class="row">
-          <div><label>Iterações</label><input id="f_iter" type="number" value="50000"></div>
-          <div><label>Seed</label><input id="f_seed" type="number" value="42"></div>
-          <div><label>Limiar "bom" (opc.)</label><input id="f_lim" type="number" placeholder="vazio = ignorar"></div>
+          <div>
+            <label>Limiar de "bom resultado" (opcional)</label>
+            <div class="help">A partir de quanto você considera que valeu a pena. Ex.: lucro ≥ 0.</div>
+            <input id="f_lim" type="number" placeholder="vazio = ignorar">
+          </div>
+          <div>
+            <label>Nº de simulações</label>
+            <div class="help">Mais = mais preciso e mais lento. 50000 é ótimo.</div>
+            <input id="f_iter" type="number" value="50000">
+          </div>
+          <div>
+            <label>Semente (seed)</label>
+            <div class="help">Mesma semente = mesmo resultado (reprodutível).</div>
+            <input id="f_seed" type="number" value="42">
+          </div>
         </div>
       </div>
 
       <div class="card">
-        <h2>2. Incertezas (distribuições)</h2>
-        <div class="mini">Tudo que você não sabe ao certo. Tipos: const, uniforme, triangular, pert, normal, lognormal, bernoulli.</div>
-        <table id="t_par"><thead><tr><th>Nome</th><th>Tipo</th><th>Parâmetros</th><th></th></tr></thead><tbody></tbody></table>
+        <h2>2. As incertezas</h2>
+        <div class="desc">Cada coisa que você <b>não sabe ao certo</b> vira uma faixa de valores. Você dá uma estimativa pessimista, uma provável e uma otimista — o sistema cuida da probabilidade. Se algo é certo, use o tipo <code>fixo</code>.</div>
+        <div id="params"></div>
         <div class="btns"><button class="ghost sm" onclick="addParam()">+ incerteza</button></div>
       </div>
 
       <div class="card">
-        <h2>3. Alternativas</h2>
-        <div class="mini">Cada opção (inclua sempre "não fazer nada"). Constantes: <code>nome=valor; nome=valor</code>. Fórmula usa constantes e incertezas: <code>+ - * / ** %</code>, funções <code>min max abs exp log sqrt</code>.</div>
+        <h2>3. As alternativas <span class="tag">obrigatório</span></h2>
+        <div class="desc">Cada decisão possível (inclua sempre a opção "não fazer nada"). Para cada uma, diga o resultado:
+          <br>• <b>Fórmula direta</b> — quando o resultado é uma conta. Use o nome das incertezas e constantes. Ex.: <code>receita - custo</code>.
+          <br>• <b>Árvore de decisão</b> — quando há eventos com chance. Você lista os cenários com a <b>probabilidade</b> de cada um e o resultado correspondente.
+        </div>
         <div id="alts"></div>
         <div class="btns"><button class="ghost sm" onclick="addAlt()">+ alternativa</button></div>
       </div>
 
       <div class="btns">
         <button onclick="run()">▶ Rodar análise</button>
-        <button class="ghost" onclick="loadCarro()">Carregar exemplo (carro)</button>
         <button class="ghost" onclick="syncToJson()">Gerar JSON ↓</button>
       </div>
       <div id="err"></div>
 
       <details>
-        <summary>JSON do modelo (avançado — suporta árvore de decisão)</summary>
+        <summary>JSON do modelo (avançado — editar/colar manualmente)</summary>
         <textarea id="json" spellcheck="false"></textarea>
         <div class="btns"><button class="ghost sm" onclick="runJson()">Rodar este JSON</button>
         <button class="ghost sm" onclick="copyJson()">Copiar</button></div>
-        <div class="mini">Para nós de chance/árvore use este JSON (esquema em <code>.claude/knowledge/decisao/formato-entrada.md</code>).</div>
+        <div class="help">Esquema completo em <code>.claude/knowledge/decisao/formato-entrada.md</code>.</div>
       </details>
     </div>
 
@@ -120,19 +184,23 @@
         <h2>Resultado <span class="tag" id="resIter"></span></h2>
         <div id="banner"></div>
         <div id="resAlts"></div>
-        <h2 style="margin-top:18px">Sensibilidade — o que vira a decisão</h2>
+        <h2 style="margin-top:18px">Sensibilidade — o que pode virar a decisão</h2>
+        <div class="desc">Quanto cada incerteza, sozinha, move a vantagem entre a melhor opção e a segunda. "PODE VIRAR" = se esse fator vier ruim, a recomendação muda.</div>
         <div id="torn" class="torn"></div>
       </div>
       <div class="card" id="hint">
         <h2>Como funciona</h2>
         <p style="font-size:13px;color:var(--text2)">
-          Preencha o problema, as incertezas (cada coisa que você "acha" mas não
-          sabe vira uma faixa mín/moda/máx) e as alternativas. Clique
-          <b>Rodar análise</b>. O motor simula milhares de cenários e devolve a
-          <b>probabilidade de cada decisão ser a melhor</b>, o intervalo de
-          resultados e quais incertezas podem virar a decisão.</p>
+          O motor calcula o <b>Valor Esperado</b> de cada alternativa (resultado
+          ponderado pelas probabilidades — o EV da árvore de decisão) e roda
+          milhares de simulações sorteando as incertezas dentro das faixas que
+          você deu.</p>
         <p style="font-size:13px;color:var(--text2);margin-top:8px">
-          Comece por <b>Carregar exemplo (carro)</b> para ver tudo preenchido.</p>
+          O resultado mostra, para cada opção: a <b>probabilidade de ser a
+          melhor decisão</b>, o valor esperado, a faixa provável (p5–p95) e
+          quais incertezas mais pesam.</p>
+        <p style="font-size:13px;color:var(--text2);margin-top:8px">
+          Clique num <b>exemplo pronto</b> acima para ver tudo preenchido.</p>
       </div>
     </div>
   </div>
@@ -308,104 +376,250 @@ function analisar(m){
 // ---------- UI ----------
 function fmtMoney(v,c){const s=(Math.round(v*100)/100).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});return (c?c+' ':'')+s;}
 function el(h){const d=document.createElement('div');d.innerHTML=h.trim();return d.firstChild;}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
 
-const DIST_FIELDS={const:['valor'],uniforme:['min','max'],triangular:['min','moda','max'],
-  pert:['min','moda','max'],normal:['media','desvio'],lognormal:['media_log','desvio_log'],
-  bernoulli:['p']};
+// Tipos de incerteza com rótulos amigáveis
+const DIST={
+  fixo:{dist:'const',campos:[['valor','Valor fixo']],
+    desc:'Valor certo, sem incerteza.'},
+  faixa:{dist:'pert',campos:[['min','Pior caso (pessimista)'],['moda','Mais provável'],['max','Melhor caso (otimista)']],
+    desc:'3 estimativas; concentra no mais provável. Recomendado para custos, prazos e ganhos.'},
+  triangular:{dist:'triangular',campos:[['min','Pior caso'],['moda','Mais provável'],['max','Melhor caso']],
+    desc:'3 estimativas com peso linear entre os extremos.'},
+  uniforme:{dist:'uniforme',campos:[['min','Mínimo'],['max','Máximo']],
+    desc:'Qualquer valor entre mínimo e máximo, com a mesma chance.'},
+  normal:{dist:'normal',campos:[['media','Valor médio'],['desvio','Variação típica (±)']],
+    desc:'Erro simétrico em torno de uma média.'},
+  probabilidade:{dist:'bernoulli',campos:[['p','Probabilidade de ocorrer (0 a 1)']],
+    desc:'Evento sim/não: vale 1 com essa probabilidade, senão 0.'}
+};
+const DIST2KEY={const:'fixo',pert:'faixa',triangular:'triangular',uniforme:'uniforme',normal:'normal',bernoulli:'probabilidade'};
 
-function paramRow(name,dist,vals){
-  const tr=document.createElement('tr');
-  tr.innerHTML=`<td><input value="${name||''}" placeholder="nome"></td>
-    <td><select>${Object.keys(DIST_FIELDS).map(d=>`<option ${d===dist?'selected':''}>${d}</option>`).join('')}</select></td>
-    <td class="pf"></td><td><button class="x sm" title="remover">✕</button></td>`;
-  const sel=tr.querySelector('select'),pf=tr.querySelector('.pf');
-  function render(){const f=DIST_FIELDS[sel.value];pf.innerHTML='';
-    f.forEach(k=>{const i=document.createElement('input');i.placeholder=k;i.dataset.k=k;i.style.width='80px';i.style.display='inline-block';i.style.marginRight='4px';
-      if(vals&&vals[k]!=null)i.value=vals[k];pf.appendChild(i);});}
-  sel.onchange=render;render();
-  tr.querySelector('.x').onclick=()=>tr.remove();
-  return tr;}
-function addParam(n,d,v){document.querySelector('#t_par tbody').appendChild(paramRow(n,d,v));}
+function paramCard(name,key,vals){
+  const opts=Object.keys(DIST).map(k=>`<option value="${k}" ${k===key?'selected':''}>${k}</option>`).join('');
+  const c=el(`<div class="pcard">
+    <div class="row">
+      <div style="flex:1.2"><label>Nome da incerteza</label>
+        <div class="help">Use sem espaços. Ex.: <code>custo_obra</code>, <code>aceitacao</code>.</div>
+        <input class="pn" value="${esc(name)}" placeholder="custo_obra"></div>
+      <div style="flex:1"><label>Tipo</label>
+        <div class="help">Como você conhece esse número?</div>
+        <select class="pt">${opts}</select></div>
+      <div style="flex:0 0 70px"><button class="x sm">remover</button></div>
+    </div>
+    <div class="pdesc help"></div>
+    <div class="pf row"></div>
+  </div>`);
+  const sel=c.querySelector('.pt'),pf=c.querySelector('.pf'),pd=c.querySelector('.pdesc');
+  function render(){const D=DIST[sel.value];pd.textContent=D.desc;pf.innerHTML='';
+    D.campos.forEach(([k,lbl])=>{
+      const w=el(`<div><label>${lbl}</label><input data-k="${k}" type="number" step="any"></div>`);
+      if(vals&&vals[k]!=null)w.querySelector('input').value=vals[k];
+      pf.appendChild(w);});}
+  sel.onchange=()=>{vals=null;render();};render();
+  c.querySelector('.x').onclick=()=>c.remove();
+  return c;}
+function addParam(n,key,v){document.getElementById('params').appendChild(paramCard(n||'',key||'faixa',v||null));}
+
+function scnRow(s){
+  s=s||{};
+  const r=el(`<div class="scn">
+    <div><label>Cenário</label><input class="cn" value="${esc(s.nome||'')}" placeholder="Alta aceitação"></div>
+    <div><label>Probabilidade</label><input class="cp" value="${esc(s.prob!=null?s.prob:'')}" placeholder="60"></div>
+    <div class="chk"><label style="visibility:hidden">x</label><span><input type="checkbox" class="cr" ${s.resto?'checked':''}> resto</span></div>
+    <div><label>Resultado (R$ ou fórmula)</label><input class="cv" value="${esc(s.res!=null?s.res:'')}" placeholder="800000  ou  receita - custo"></div>
+    <div><label style="visibility:hidden">x</label><button class="x sm">✕</button></div>
+  </div>`);
+  r.querySelector('.x').onclick=()=>{r.remove();};
+  return r;}
 
 function altBox(a){
   a=a||{};
   const b=el(`<div class="alt">
-    <div class="row"><div><label>Nome da alternativa</label><input class="an" value="${a.nome||''}" placeholder="Comprar carro novo"></div>
-    <div style="flex:0 0 90px;display:flex;align-items:flex-end"><button class="x sm">remover</button></div></div>
-    <label>Constantes (nome=valor; nome=valor)</label>
-    <input class="ac" value="${a.constantes?Object.entries(a.constantes).map(([k,v])=>k+'='+v).join('; '):''}" placeholder="preco=100000">
-    <label>Fórmula do resultado</label>
-    <input class="af" value="${a.formula?a.formula.replace(/"/g,'&quot;'):''}" placeholder="preco - valor_revenda + manut">
+    <div class="row">
+      <div style="flex:1"><label>Nome da alternativa</label>
+        <input class="an" value="${esc(a.nome||'')}" placeholder="Lançar o software"></div>
+      <div style="flex:0 0 70px"><button class="x sm">remover</button></div>
+    </div>
+    <label>Constantes desta alternativa (opcional)</label>
+    <div class="help">Valores fixos só desta opção. Formato <code>nome=valor; nome=valor</code>. Ex.: <code>preco=100000; anos=2.5</code></div>
+    <input class="ac" placeholder="preco=100000; anos=2.5">
+    <div class="modetabs">
+      <button type="button" data-m="formula">Fórmula direta</button>
+      <button type="button" data-m="arvore">Árvore de decisão</button>
+    </div>
+    <div class="m-formula">
+      <label>Fórmula do resultado</label>
+      <div class="help">Conta usando constantes e incertezas. Ex.: <code>receita - custo</code> · <code>0</code> (não fazer nada)</div>
+      <input class="af" placeholder="receita - custo">
+    </div>
+    <div class="m-arvore" style="display:none">
+      <label>Pergunta do evento incerto (nó de chance)</label>
+      <div class="help">Ex.: "Qual a aceitação do público?" · "O orçamento estoura?"</div>
+      <input class="atn" placeholder="Aceitação do público">
+      <div class="help" style="margin-top:8px">Liste os cenários. <b>Probabilidade</b>: número em % (ex.: 60) <i>ou</i> o nome de uma incerteza do tipo "probabilidade". Marque <b>resto</b> em um cenário para ele completar 100% automaticamente.</div>
+      <div class="scns"></div>
+      <button type="button" class="ghost sm addscn" style="margin-top:4px">+ cenário</button>
+      <div class="sumbadge"></div>
+    </div>
   </div>`);
   b.querySelector('.x').onclick=()=>b.remove();
+  b.querySelector('.ac').value=a.constantes?Object.entries(a.constantes).map(([k,v])=>k+'='+v).join('; '):'';
+  const mf=b.querySelector('.m-formula'),ma=b.querySelector('.m-arvore');
+  const tabs=b.querySelectorAll('.modetabs button');
+  function setMode(mode){
+    tabs.forEach(t=>t.classList.toggle('on',t.dataset.m===mode));
+    mf.style.display=mode==='formula'?'':'none';
+    ma.style.display=mode==='arvore'?'':'none';
+    b.dataset.mode=mode;}
+  tabs.forEach(t=>t.onclick=()=>setMode(t.dataset.m));
+  const scns=b.querySelector('.scns');
+  function updateSum(){
+    let soma=0,temResto=false,temVar=false;
+    scns.querySelectorAll('.scn').forEach(r=>{
+      if(r.querySelector('.cr').checked){temResto=true;return;}
+      const v=r.querySelector('.cp').value.trim();
+      if(v==='')return;
+      if(isNaN(+v))temVar=true; else soma+=+v;});
+    const badge=b.querySelector('.sumbadge');
+    if(temVar){badge.className='sumbadge sum-ok';badge.textContent='Probabilidade vinda de incerteza — ok';return;}
+    if(temResto){badge.className='sumbadge sum-ok';badge.textContent='Soma fixa: '+soma+'% + resto = 100%';return;}
+    badge.className='sumbadge '+(Math.abs(soma-100)<.01?'sum-ok':'sum-bad');
+    badge.textContent='Soma das probabilidades: '+soma+'%'+(Math.abs(soma-100)<.01?' ✓':' (precisa dar 100%)');}
+  function addScn(s){const r=scnRow(s);scns.appendChild(r);
+    r.querySelectorAll('input').forEach(i=>i.addEventListener('input',updateSum));
+    r.querySelector('.x').addEventListener('click',()=>setTimeout(updateSum));
+    updateSum();}
+  b.querySelector('.addscn').onclick=()=>addScn();
+  b._addScn=addScn;
+  // preencher
+  if(a.arvore){
+    setMode('arvore');
+    const node=a.arvore;
+    b.querySelector('.atn').value=node.nome||'';
+    (node.ramos||[]).forEach(rm=>{
+      let prob='';
+      if(rm.p_resto)prob='';
+      else if(rm.p_var!=null)prob=rm.p_var;
+      else if(rm.p!=null)prob=+(rm.p*100).toFixed(6);
+      addScn({nome:rm.nome||'',prob:prob,resto:!!rm.p_resto,
+        res:(rm.formula!=null?rm.formula:(rm.valor!=null?rm.valor:''))});});
+  }else{
+    setMode('formula');
+    b.querySelector('.af').value=a.formula!=null?a.formula:'';
+  }
   return b;}
 function addAlt(a){document.getElementById('alts').appendChild(altBox(a));}
 
+function parseConst(str){const cs={};(str||'').split(';').forEach(p=>{
+  const [k,v]=p.split('=');if(k&&k.trim())cs[k.trim()]=parseFloat(v);});return cs;}
+
 function readForm(){
   const params={};
-  document.querySelectorAll('#t_par tbody tr').forEach(tr=>{
-    const n=tr.querySelector('input').value.trim();if(!n)return;
-    const d=tr.querySelector('select').value,o={dist:d};
-    tr.querySelectorAll('.pf input').forEach(i=>o[i.dataset.k]=parseFloat(i.value));
+  document.querySelectorAll('#params .pcard').forEach(c=>{
+    const n=c.querySelector('.pn').value.trim();if(!n)return;
+    const D=DIST[c.querySelector('.pt').value],o={dist:D.dist};
+    c.querySelectorAll('.pf input').forEach(i=>{if(i.value!=='')o[i.dataset.k]=parseFloat(i.value);});
     params[n]=o;});
   const alts=[];
   document.querySelectorAll('#alts .alt').forEach(b=>{
     const nome=b.querySelector('.an').value.trim();if(!nome)return;
-    const cs={};b.querySelector('.ac').value.split(';').forEach(p=>{
-      const [k,v]=p.split('=');if(k&&k.trim())cs[k.trim()]=parseFloat(v);});
-    alts.push({nome,constantes:cs,formula:b.querySelector('.af').value.trim()});});
+    const obj={nome,constantes:parseConst(b.querySelector('.ac').value)};
+    if(b.dataset.mode==='arvore'){
+      const ramos=[];
+      b.querySelectorAll('.scns .scn').forEach(r=>{
+        const cn=r.querySelector('.cn').value.trim();
+        const res=r.querySelector('.cv').value.trim();
+        if(res==='')return;
+        const ramo={tipo:'folha',formula:res};
+        if(cn)ramo.nome=cn;
+        if(r.querySelector('.cr').checked){ramo.p_resto=true;}
+        else{const pv=r.querySelector('.cp').value.trim();
+          if(pv==='')return;
+          if(isNaN(+pv))ramo.p_var=pv; else ramo.p=(+pv)/100;}
+        ramos.push(ramo);});
+      obj.arvore={tipo:'chance',nome:b.querySelector('.atn').value.trim(),ramos};
+    }else{
+      obj.formula=b.querySelector('.af').value.trim();
+    }
+    alts.push(obj);});
   const lim=document.getElementById('f_lim').value;
   return{problema:document.getElementById('f_prob').value,
     objetivo:document.getElementById('f_obj').value,
     sentido:document.getElementById('f_sent').value,
+    horizonte:document.getElementById('f_horiz').value,
     moeda:document.getElementById('f_moeda').value,
     iteracoes:+document.getElementById('f_iter').value,
     seed:+document.getElementById('f_seed').value,
     limiar_bom_negocio:lim===''?null:+lim,
     parametros:params,alternativas:alts};}
 
-function showError(e){document.getElementById('err').innerHTML='<div class="err">⚠ '+e+'</div>';}
+function showError(e){document.getElementById('err').innerHTML='<div class="err">⚠ '+esc(e)+'</div>';}
 function clearError(){document.getElementById('err').innerHTML='';}
 
 function render(m,r){
   clearError();
   document.getElementById('hint').style.display='none';
-  const C=document.getElementById('resCard');C.style.display='block';
+  document.getElementById('resCard').style.display='block';
   document.getElementById('resIter').textContent=r.iteracoes.toLocaleString('pt-BR')+' simulações';
   const best=r.alternativas.reduce((a,b)=>b.prob_melhor>a.prob_melhor?b:a);
   document.getElementById('banner').innerHTML=
-    `<div class="banner">Recomendação: <b>${r.recomendacao}</b> — maior chance de ser a melhor decisão (${(best.prob_melhor*100).toFixed(1)}%).</div>`;
+    `<div class="banner">Recomendação: <b>${esc(r.recomendacao)}</b> — maior chance de ser a melhor decisão (${(best.prob_melhor*100).toFixed(1)}%).</div>`;
   const RA=document.getElementById('resAlts');RA.innerHTML='';
   r.alternativas.slice().sort((a,b)=>b.prob_melhor-a.prob_melhor).forEach(a=>{
     RA.appendChild(el(`<div class="res-alt ${a.nome===r.recomendacao?'win':''}">
-      <div class="res-head"><span class="res-name">${a.nome}</span>
+      <div class="res-head"><span class="res-name">${esc(a.nome)}</span>
         <span class="pct">${(a.prob_melhor*100).toFixed(1)}%</span></div>
       <div style="font-size:11px;color:var(--text3)">probabilidade de ser a MELHOR decisão</div>
       <div class="bar"><i style="width:${(a.prob_melhor*100).toFixed(1)}%"></i></div>
       <div class="stats">
         <span>Valor esperado: <b>${fmtMoney(a.emv,r.moeda)}</b></span>
         <span>Média: <b>${fmtMoney(a.media,r.moeda)}</b></span>
-        <span>p5–p95: <b>${fmtMoney(a.p5,r.moeda)} … ${fmtMoney(a.p95,r.moeda)}</b></span>
-        ${a.prob_bom!=null?`<span>P(bom | ${fmtMoney(a.limiar,r.moeda)}): <b>${(a.prob_bom*100).toFixed(1)}%</b></span>`:''}
+        <span>Faixa provável p5–p95: <b>${fmtMoney(a.p5,r.moeda)} … ${fmtMoney(a.p95,r.moeda)}</b></span>
+        ${a.prob_bom!=null?`<span>Chance de bom resultado: <b>${(a.prob_bom*100).toFixed(1)}%</b></span>`:''}
       </div></div>`));});
   const T=document.getElementById('torn');
   const mx=Math.max(...r.sensibilidade.map(t=>t.swing),1e-9);
-  T.innerHTML=`<div style="font-size:12px;color:var(--text2);margin-bottom:8px">Vantagem de <b>${r.comparacao.recomendada}</b> sobre <b>${r.comparacao.concorrente}</b>: ${fmtMoney(r.comparacao.vantagem_central,r.moeda)} (cenário central).</div>`+
-    r.sensibilidade.slice(0,8).map(t=>`<div class="b"><span class="n">${t.parametro}</span>
+  T.innerHTML=`<div style="font-size:12px;color:var(--text2);margin-bottom:8px">Vantagem de <b>${esc(r.comparacao.recomendada)}</b> sobre <b>${esc(r.comparacao.concorrente)}</b>: ${fmtMoney(r.comparacao.vantagem_central,r.moeda)} (cenário central).</div>`+
+    (r.sensibilidade.length?r.sensibilidade.slice(0,8).map(t=>`<div class="b"><span class="n">${esc(t.parametro)}</span>
       <span class="t"><i style="width:${(100*t.swing/mx).toFixed(0)}%"></i></span>
-      <span>${fmtMoney(t.swing,r.moeda)}</span>${t.pode_virar?'<span class="flip">PODE VIRAR</span>':''}</div>`).join('');
+      <span>${fmtMoney(t.swing,r.moeda)}</span>${t.pode_virar?'<span class="flip">PODE VIRAR</span>':''}</div>`).join('')
+      :'<div class="help">Sem incertezas cadastradas — resultado é determinístico.</div>');
 }
 
 function run(){try{const m=readForm();
-  if(!m.alternativas.length)throw new Error('adicione ao menos uma alternativa');
-  syncToJson();render(m,analisar(m));}catch(e){showError(e.message||String(e));}}
-function runJson(){try{const m=JSON.parse(document.getElementById('json').value);
-  render(m,analisar(m));}catch(e){showError(e.message||String(e));}}
-function syncToJson(){try{document.getElementById('json').value=JSON.stringify(readForm(),null,2);}catch(e){}}
+  if(!m.alternativas.length)throw new Error('Adicione ao menos uma alternativa.');
+  syncToJson();render(m,analisar(m));
+  document.getElementById('resCard').scrollIntoView({behavior:'smooth',block:'start'});
+}catch(e){showError(e.message||String(e));}}
+function runJson(){try{render(null,analisar(JSON.parse(document.getElementById('json').value)));
+}catch(e){showError(e.message||String(e));}}
+function syncToJson(){try{const m=readForm();delete m.horizonte;
+  document.getElementById('json').value=JSON.stringify(m,null,2);}catch(e){}}
 function copyJson(){navigator.clipboard&&navigator.clipboard.writeText(document.getElementById('json').value);}
 
-const CARRO={problema:"Comprar um carro novo (R$ 100.000) ou manter o carro usado?",
- objetivo:"Custo total em 30 meses",sentido:"min",moeda:"R$",iteracoes:50000,seed:42,
+function loadModel(M){
+  document.getElementById('f_prob').value=M.problema||'';
+  document.getElementById('f_obj').value=M.objetivo||'';
+  document.getElementById('f_sent').value=(M.sentido||'max');
+  document.getElementById('f_horiz').value=M.horizonte||'';
+  document.getElementById('f_moeda').value=M.moeda||'R$';
+  document.getElementById('f_iter').value=M.iteracoes||50000;
+  document.getElementById('f_seed').value=M.seed!=null?M.seed:42;
+  document.getElementById('f_lim').value=(M.limiar_bom_negocio==null?'':M.limiar_bom_negocio);
+  document.getElementById('params').innerHTML='';
+  for(const k in (M.parametros||{})){const s=M.parametros[k];
+    addParam(k,DIST2KEY[String(s.dist).toLowerCase()]||'faixa',s);}
+  document.getElementById('alts').innerHTML='';
+  (M.alternativas||[]).forEach(a=>addAlt(a));
+  syncToJson();
+  try{render(M,analisar(M));
+    document.getElementById('resCard').scrollIntoView({behavior:'smooth',block:'start'});}catch(e){showError(e.message);}
+}
+
+// ---------- Exemplos ----------
+const EX_CARRO={problema:"Comprar um carro novo (R$ 100.000) ou manter o carro usado?",
+ objetivo:"Custo total em 30 meses",sentido:"min",horizonte:"30 meses",moeda:"R$",iteracoes:50000,seed:42,
  limiar_bom_negocio:20000,
  parametros:{
   desval_30m:{dist:"pert",min:.30,moda:.42,max:.55},
@@ -420,28 +634,42 @@ const CARRO={problema:"Comprar um carro novo (R$ 100.000) ou manter o carro usad
   {nome:"Comprar carro novo",constantes:{preco_novo:100000},
    formula:"preco_novo - venda_usado_agora - preco_novo*(1-desval_30m) + manut_novo_total"},
   {nome:"Manter carro usado",constantes:{anos:2.5},
-   arvore:{tipo:"chance",ramos:[
-     {p_var:"prob_pane",tipo:"folha",formula:"custo_componentes + manut_ano_usado*anos + custo_pane_grave - residual_usado_30m"},
-     {p_resto:true,tipo:"folha",formula:"custo_componentes + manut_ano_usado*anos - residual_usado_30m"}]}}]};
-function loadCarro(){
-  document.getElementById('f_prob').value=CARRO.problema;
-  document.getElementById('f_obj').value=CARRO.objetivo;
-  document.getElementById('f_sent').value=CARRO.sentido;
-  document.getElementById('f_moeda').value=CARRO.moeda;
-  document.getElementById('f_iter').value=CARRO.iteracoes;
-  document.getElementById('f_seed').value=CARRO.seed;
-  document.getElementById('f_lim').value=CARRO.limiar_bom_negocio;
-  const tb=document.querySelector('#t_par tbody');tb.innerHTML='';
-  for(const k in CARRO.parametros){const s=CARRO.parametros[k];addParam(k,s.dist,s);}
-  document.getElementById('alts').innerHTML='';
-  CARRO.alternativas.forEach(a=>addAlt(a.formula?a:{nome:a.nome}));
-  document.getElementById('json').value=JSON.stringify(CARRO,null,2);
-  render(CARRO,analisar(CARRO));
-}
+   arvore:{tipo:"chance",nome:"Ocorre uma pane grave no carro usado?",ramos:[
+     {nome:"Tem pane grave",p_var:"prob_pane",tipo:"folha",formula:"custo_componentes + manut_ano_usado*anos + custo_pane_grave - residual_usado_30m"},
+     {nome:"Sem pane grave",p_resto:true,tipo:"folha",formula:"custo_componentes + manut_ano_usado*anos - residual_usado_30m"}]}}]};
+
+const EX_PRODUTO={problema:"Lançar um novo software no mercado ou não?",
+ objetivo:"Lucro em 12 meses",sentido:"max",horizonte:"12 meses",moeda:"R$",iteracoes:50000,seed:42,
+ limiar_bom_negocio:0,
+ parametros:{
+  lucro_alta:{dist:"pert",min:500000,moda:800000,max:1100000},
+  prejuizo_baixa:{dist:"pert",min:150000,moda:300000,max:500000}},
+ alternativas:[
+  {nome:"Lançar o software",
+   arvore:{tipo:"chance",nome:"Qual será a aceitação do público?",ramos:[
+     {nome:"Alta aceitação",p:0.60,tipo:"folha",formula:"lucro_alta"},
+     {nome:"Baixa aceitação",p_resto:true,tipo:"folha",formula:"-prejuizo_baixa"}]}},
+  {nome:"Não lançar (status quo)",formula:"0"}]};
+
+const EX_REFORMA={problema:"Fazer a reforma da casa agora ou não?",
+ objetivo:"Ganho líquido: valorização menos custo",sentido:"max",horizonte:"projeto",moeda:"R$",iteracoes:50000,seed:42,
+ limiar_bom_negocio:0,
+ parametros:{
+  valorizacao:{dist:"pert",min:40000,moda:70000,max:100000},
+  custo_base:{dist:"pert",min:35000,moda:50000,max:65000},
+  custo_extra:{dist:"pert",min:8000,moda:15000,max:30000},
+  prob_estouro:{dist:"pert",min:0.20,moda:0.35,max:0.55}},
+ alternativas:[
+  {nome:"Fazer a reforma",
+   arvore:{tipo:"chance",nome:"O orçamento estoura?",ramos:[
+     {nome:"Estoura o orçamento",p_var:"prob_estouro",tipo:"folha",formula:"valorizacao - custo_base - custo_extra"},
+     {nome:"Fica no orçamento",p_resto:true,tipo:"folha",formula:"valorizacao - custo_base"}]}},
+  {nome:"Não reformar (status quo)",formula:"0"}]};
+
 // estado inicial
-addParam('exemplo',' pert'.trim(),{min:0,moda:0,max:0});
+addParam('exemplo_incerteza','faixa',{min:0,moda:0,max:0});
 addAlt({nome:'Alternativa A',formula:'0'});
-addAlt({nome:'Alternativa B (status quo)',formula:'0'});
+addAlt({nome:'Alternativa B (não fazer nada)',formula:'0'});
 </script>
 </body>
 </html>
